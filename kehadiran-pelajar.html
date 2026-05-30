@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ERPH Dashboard | 2 Saidina Abu Bakar</title>
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+  
+  :root {
+    --bg-main: #0f172a;
+    --card-bg: rgba(30, 41, 59, 0.7);
+    --accent-blue: #38bdf8;
+    --text-primary: #f8fafc;
+    --text-secondary: #94a3b8;
+    --glass: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  body {
+    background-color: var(--bg-main);
+    color: var(--text-primary);
+    font-family: 'Inter', sans-serif;
+    margin: 0;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+  }
+
+  .db-wrap {
+    width: 100%;
+    max-width: 900px;
+    backdrop-filter: blur(12px);
+    background: linear-gradient(160deg, #1e293b 0%, #0f172a 100%);
+    padding: 40px;
+    border-radius: 24px;
+    border: var(--glass);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  }
+
+  .db-header { text-align: center; margin-bottom: 40px; }
+  .db-header h2 { font-size: 1.8em; margin: 0; letter-spacing: -0.5px; }
+  .db-subtitle { color: var(--text-secondary); font-size: 0.9em; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 15px; }
+  
+  #info-minggu {
+    display: inline-block;
+    background: rgba(56, 189, 248, 0.1);
+    color: var(--accent-blue);
+    padding: 8px 20px;
+    border-radius: 50px;
+    font-weight: 600;
+    font-size: 0.85em;
+    border: 1px solid rgba(56, 189, 248, 0.2);
+  }
+
+  .filter-tabs {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    background: rgba(0,0,0,0.2);
+    padding: 6px;
+    border-radius: 14px;
+    margin-bottom: 40px;
+  }
+
+  .filter-tab {
+    padding: 10px 20px;
+    border-radius: 10px;
+    border: none;
+    background: transparent;
+    color: var(--text-secondary);
+    font-weight: 500;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+
+  .filter-tab.active { background: var(--accent-blue); color: #000; }
+
+  .db-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+  }
+
+  .db-card {
+    background: var(--card-bg);
+    padding: 24px;
+    border-radius: 20px;
+    border: var(--glass);
+    position: relative;
+  }
+
+  .db-card h3 { font-size: 0.9em; color: var(--text-secondary); margin: 0 0 10px; letter-spacing: 1px; }
+  .card-date { font-size: 1.2em; font-weight: 700; display: block; margin-bottom: 20px; }
+  
+  .stat-row { display: flex; justify-content: space-between; margin-bottom: 12px; }
+  .stat-badge { font-weight: 700; font-size: 1.1em; }
+  
+  .card-total {
+    margin-top: 20px;
+    padding-top: 15px;
+    border-top: var(--glass);
+    text-align: right;
+    font-size: 1.2em;
+    font-weight: 700;
+    color: var(--accent-blue);
+  }
+
+  @media (max-width: 480px) {
+    .db-wrap { padding: 20px; }
+    .filter-tabs { flex-wrap: wrap; }
+  }
+</style>
+</head>
+<body>
+
+<div class="db-wrap">
+  <div class="db-header">
+    <h2>2 Saidina Abu Bakar</h2>
+    <div class="db-subtitle">Rekod Kehadiran Pelajar</div>
+    <span id="info-minggu">Memuatkan data...</span>
+  </div>
+
+  <div class="filter-container">
+    <div class="filter-tabs">
+      <button class="filter-tab active" onclick="switchMinggu('Minggu 1', this)">Minggu 1</button>
+      <button class="filter-tab" onclick="switchMinggu('Minggu 2', this)">Minggu 2</button>
+      <button class="filter-tab" onclick="switchMinggu('Minggu 3', this)">Minggu 3</button>
+      <button class="filter-tab" onclick="switchMinggu('Minggu 4', this)">Minggu 4</button>
+    </div>
+  </div>
+
+  <div id="db-loading" style="text-align:center; padding: 40px; color: var(--text-secondary);">
+    <div class="spinner"></div>
+    <span id="loading-text">Sistem sedang diproses...</span>
+  </div>
+
+  <div class="db-grid" id="dashboard" style="display:none;">
+    <div class="db-card">
+      <h3>AHAD</h3>
+      <span id="date-ahad" class="card-date">-</span>
+      <div class="stat-row"><span>Lelaki</span><span class="stat-badge" id="ahad-l">0</span></div>
+      <div class="stat-row"><span>Perempuan</span><span class="stat-badge" id="ahad-p">0</span></div>
+      <div class="card-total" id="ahad-t">0</div>
+    </div>
+
+    <div class="db-card">
+      <h3>ISNIN</h3>
+      <span id="date-isnin" class="card-date">-</span>
+      <div class="stat-row"><span>Lelaki</span><span class="stat-badge" id="isnin-l">0</span></div>
+      <div class="stat-row"><span>Perempuan</span><span class="stat-badge" id="isnin-p">0</span></div>
+      <div class="card-total" id="isnin-t">0</div>
+    </div>
+
+    <div class="db-card">
+      <h3>KHAMIS</h3>
+      <span id="date-khamis" class="card-date">-</span>
+      <div class="stat-row"><span>Lelaki</span><span class="stat-badge" id="khamis-l">0</span></div>
+      <div class="stat-row"><span>Perempuan</span><span class="stat-badge" id="khamis-p">0</span></div>
+      <div class="card-total" id="khamis-t">0</div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const BASE_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRHwhFt3BHhdQ38Oz3Ce8JIWZ_2pmYvry6-UWw6f7jjLFgbkm-zwtKpxG6CP6GMVgMhrknXhQJTmg3q/pub";
+  const SHEET_GIDS = { "Minggu 1": "0", "Minggu 2": "716234024", "Minggu 3": "929262261", "Minggu 4": "1947024537" };
+
+  function parseCSV(text) {
+    const lines = text.trim().split('\n');
+    return lines.map(line => {
+      const result = []; let current = ''; let inQuotes = false;
+      for (let i = 0; i < line.length; i++) {
+        const ch = line[i];
+        if (ch === '"') inQuotes = !inQuotes;
+        else if (ch === ',' && !inQuotes) { result.push(current.trim()); current = ''; }
+        else current += ch;
+      }
+      result.push(current.trim()); return result;
+    });
+  }
+
+  function kiraKehadiran(rows) {
+    const tarikhRow = rows[1] || [];
+    let ahad = { lelaki: 0, perempuan: 0 }, isnin = { lelaki: 0, perempuan: 0 }, khamis = { lelaki: 0, perempuan: 0 };
+    for (let i = 2; i < rows.length; i++) {
+      const row = rows[i]; if (!row || row.length < 5) continue;
+      const statusAhad = (row[2] || '').toLowerCase(), statusIsnin = (row[3] || '').toLowerCase(), statusKhamis = (row[4] || '').toLowerCase(), jantina = (row[5] || '').toUpperCase().trim();
+      if (statusAhad.startsWith('hadir')) { if (jantina === 'LELAKI') ahad.lelaki++; else if (jantina === 'PEREMPUAN') ahad.perempuan++; }
+      if (statusIsnin.startsWith('hadir')) { if (jantina === 'LELAKI') isnin.lelaki++; else if (jantina === 'PEREMPUAN') isnin.perempuan++; }
+      if (statusKhamis.startsWith('hadir')) { if (jantina === 'LELAKI') khamis.lelaki++; else if (jantina === 'PEREMPUAN') khamis.perempuan++; }
+    }
+    return { ahad: { tarikh: tarikhRow[2] || '-', ...ahad }, isnin: { tarikh: tarikhRow[3] || '-', ...isnin }, khamis: { tarikh: tarikhRow[4] || '-', ...khamis } };
+  }
+
+  function kemaskiniUI(minggu, data) {
+    document.getElementById('info-minggu').innerText = minggu;
+    document.getElementById('date-ahad').innerText = data.ahad.tarikh;
+    document.getElementById('date-isnin').innerText = data.isnin.tarikh;
+    document.getElementById('date-khamis').innerText = data.khamis.tarikh;
+    document.getElementById('ahad-l').innerText = data.ahad.lelaki; document.getElementById('ahad-p').innerText = data.ahad.perempuan; document.getElementById('ahad-t').innerText = (data.ahad.lelaki + data.ahad.perempuan);
+    document.getElementById('isnin-l').innerText = data.isnin.lelaki; document.getElementById('isnin-p').innerText = data.isnin.perempuan; document.getElementById('isnin-t').innerText = (data.isnin.lelaki + data.isnin.perempuan);
+    document.getElementById('khamis-l').innerText = data.khamis.lelaki; document.getElementById('khamis-p').innerText = data.khamis.perempuan; document.getElementById('khamis-t').innerText = (data.khamis.lelaki + data.khamis.perempuan);
+    document.getElementById('db-loading').style.display = 'none'; document.getElementById('dashboard').style.display = 'grid';
+  }
+
+  function switchMinggu(minggu, btn) {
+    document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+    btn.classList.add('active'); updateDashboard(minggu);
+  }
+
+  function updateDashboard(minggu) {
+    document.getElementById('dashboard').style.display = 'none'; document.getElementById('db-loading').style.display = 'block';
+    fetch(BASE_URL + "?gid=" + SHEET_GIDS[minggu] + "&single=true&output=csv")
+      .then(r => r.text()).then(csvText => { kemaskiniUI(minggu, kiraKehadiran(parseCSV(csvText))); })
+      .catch(err => { document.getElementById('loading-text').innerText = "Ralat memuatkan data."; });
+  }
+
+  window.onload = () => updateDashboard("Minggu 1");
+</script>
+</body>
+</html>
