@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mini e-RPH | Borang Input</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
+<style>
+  .rph-container { font-family: 'Plus Jakarta Sans', sans-serif; max-width: 900px; margin: 20px auto; padding: 25px; background: #ffffff; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); border: 1px solid #eee; }
+  .form-group { margin-bottom: 20px; }
+  label { font-weight: 700; display: block; margin-bottom: 8px; font-size: 14px; color: #374151; }
+  select, input, textarea { width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 10px; box-sizing: border-box; font-size: 15px; }
+  
+  .kemahiran-grid { 
+    display: grid; 
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); 
+    gap: 12px; 
+    background: #f9fafb; 
+    padding: 20px; 
+    border-radius: 12px; 
+    border: 1px solid #e5e7eb; 
+  }
+  .check-item { 
+    display: flex; 
+    align-items: center; 
+    gap: 12px; 
+    cursor: pointer; 
+    padding: 10px;
+    background: #fff;
+    border-radius: 8px;
+    border: 1px solid #f3f4f6;
+    transition: 0.2s;
+    font-size: 15px;
+  }
+  .check-item:hover { border-color: #0052ff; background: #eff6ff; }
+  .check-item input[type="checkbox"] { width: 18px; height: 18px; cursor: pointer; margin: 0; }
+
+  .btn-submit { background: #0052ff; color: white; padding: 18px; border: none; border-radius: 12px; cursor: pointer; width: 100%; font-weight: bold; font-size: 16px; }
+  .rph-card { background: #fff; border-radius: 15px; padding: 20px; border-left: 6px solid #0052ff; position: relative; border: 1px solid #eee; margin-bottom: 20px; transition: 0.3s; }
+  .rph-card:hover { transform: translateY(-5px); box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+  .hidden { display: none; }
+  .card-tag { font-size: 11px; background: #0052ff; color: white; padding: 3px 10px; border-radius: 5px; }
+  
+  .card-actions { margin-top: 15px; display: flex; gap: 10px; flex-wrap: wrap; }
+  .btn-lihat { background: #10b981; color: white; border: none; padding: 8px 15px; border-radius: 8px; cursor: pointer; font-size: 12px; font-weight: bold; flex: 1; min-width: 60px; }
+  .btn-edit-card { background: #f59e0b; color: white; border: none; padding: 8px 15px; border-radius: 8px; cursor: pointer; font-size: 12px; font-weight: bold; flex: 1; min-width: 60px; }
+  .btn-padam { background: #ef4444; color: white; border: none; padding: 8px 15px; border-radius: 8px; cursor: pointer; font-size: 12px; font-weight: bold; flex: 1; min-width: 60px; }
+  .btn-copy-mini { background: #f3f4f6; color: #374151; border: 1px solid #d1d5db; padding: 4px 8px; border-radius: 6px; cursor: pointer; font-size: 10px; font-weight: bold; margin-left: 5px; }
+  .btn-copy-mini:hover { background: #e5e7eb; }
+
+  .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); backdrop-filter: blur(5px); }
+  .modal-content { background: white; margin: 5% auto; padding: 25px; width: 80%; max-width: 600px; border-radius: 20px; max-height: 80vh; overflow-y: auto; }
+  .modal-header { border-bottom: 2px solid #eee; padding-bottom: 10px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; }
+  .close-modal { cursor: pointer; font-size: 24px; font-weight: bold; color: #666; }
+  .info-row { margin-bottom: 12px; border-bottom: 1px solid #f3f4f6; padding-bottom: 8px; position: relative; }
+  .info-label { font-weight: bold; color: #0052ff; font-size: 12px; text-transform: uppercase; display: flex; align-items: center; justify-content: space-between; }
+  .info-val { font-size: 15px; color: #1f2937; margin-top: 3px; line-height: 1.4; padding-right: 10px; }
+
+  /* ── Butang Kad Data eRPH ── */
+  .nav-bar {
+    max-width: 900px;
+    margin: 20px auto 0 auto;
+    padding: 0 25px;
+    display: flex;
+    justify-content: flex-end;
+  }
+  .btn-kad-erph {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: linear-gradient(135deg, #0052ff 0%, #0a3db5 100%);
+    color: white;
+    text-decoration: none;
+    padding: 12px 22px;
+    border-radius: 14px;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    box-shadow: 0 4px 15px rgba(0, 82, 255, 0.35);
+    transition: all 0.25s ease;
+    border: 1px solid rgba(255,255,255,0.15);
+    letter-spacing: 0.3px;
+  }
+  .btn-kad-erph:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 82, 255, 0.45);
+    background: linear-gradient(135deg, #1a62ff 0%, #0044cc 100%);
+  }
+  .btn-kad-erph:active {
+    transform: translateY(0px);
+    box-shadow: 0 3px 10px rgba(0, 82, 255, 0.3);
+  }
+  .btn-kad-erph .icon-wrap {
+    width: 28px;
+    height: 28px;
+    background: rgba(255,255,255,0.18);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .btn-kad-erph .icon-wrap svg {
+    width: 15px;
+    height: 15px;
+    fill: white;
+  }
+  .btn-kad-erph .label-wrap {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.2;
+  }
+  .btn-kad-erph .label-main {
+    font-size: 13px;
+    font-weight: 800;
+  }
+  .btn-kad-erph .label-sub {
+    font-size: 10px;
+    font-weight: 500;
+    opacity: 0.8;
+    letter-spacing: 0.5px;
+  }
+  .btn-kad-erph .arrow {
+    margin-left: 4px;
+    font-size: 16px;
+    opacity: 0.7;
+  }
+
+  /* ── Mobile Responsive ── */
+  @media (max-width: 600px) {
+    .rph-container { margin: 10px; padding: 16px; border-radius: 14px; }
+    .nav-bar { padding: 0 10px; margin: 10px auto 0; }
+    .btn-kad-erph { padding: 10px 14px; font-size: 12px; }
+    .modal-content { width: 95%; margin: 10% auto; padding: 18px; }
+    .kemahiran-grid { grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 8px; padding: 12px; }
+  }
+</style>
+
+<!-- ══════════════════════════════════════════════════════
+  ⚠️  GANTIKAN URL DI BAWAH DENGAN URL WEB APP ANDA
+  Selepas deploy Apps Script, copy URL dan tampal di sini
+  ══════════════════════════════════════════════════════ -->
+<script>
+  // ══════════════════════════════════════════════════════════
+  // ⚠️  TUKAR URL INI KEPADA URL WEB APP APPS SCRIPT ANDA
+  //     (Sama URL yang ditampal dalam kad_erph.html)
+  // ══════════════════════════════════════════════════════════
+  const scriptURL = "https://script.google.com/macros/s/AKfycbyuodEeO2CLWSy7W2mcBHU_Yi6ge3F6fqIeCtVe0-eyiU1Ln-FdoveRg3DwL5EhRXSaHQ/exec";
+</script>
+
+<!-- ── Butang ke Arkib eRPH — UBAH HREF KEPADA URL PAGE ARKIB ANDA ── -->
+<div class="nav-bar">
+  <a href="TAMPAL_URL_KAD_ERPH_ANDA_DI_SINI" target="_blank" class="btn-kad-erph">
+    <span class="icon-wrap">
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 14H4V6h16v12zM6 10h2v2H6zm0 4h8v2H6zm4-4h8v2h-8z"/>
+      </svg>
+    </span>
+    <span class="label-wrap">
+      <span class="label-main">Kad Data eRPH</span>
+      <span class="label-sub">LIHAT REKOD LENGKAP</span>
+    </span>
+    <span class="arrow">›</span>
+  </a>
+</div>
+
+<div class="rph-container">
+  <h2 id="formTitle" style="border-left: 5px solid #0052ff; padding-left: 15px;">Mini e-RPH</h2>
+  <input type="hidden" id="editRow" value="">
+
+  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+      <div class="form-group"><label>1. Hari</label><select id="hari" onchange="toggleMasa()"><option value="Ahad">Ahad</option><option value="Isnin">Isnin</option><option value="Khamis">Khamis</option></select></div>
+      <div class="form-group"><label>2. Tarikh</label><input type="date" id="tarikh"></div>
+  </div>
+
+  <div class="form-group"><label>3. Minggu</label><input type="text" id="minggu"></div>
+  <div class="form-group"><label>4. Mata Pelajaran</label><input type="text" id="subjek"></div>
+  <div class="form-group"><label>5. Kelas</label><select id="kelas"><option>٢ سيدينا ابو بكر</option><option>٢ سيدينا عمر</option><option>٢ سيدنا عثمان</option><option>٢ سيدنا علي</option></select></div>
+
+  <div class="form-group" id="box-masa-ai"><label>6. Masa Ahad & Isnin</label><select id="masaAI"><option>١.٤٥-٢.١٥ ڤتڠ</option><option>٢.١٥-٣.١٥ ڤتڠ</option><option>٣.١٥-٤.١٥ ڤتڠ</option></select></div>
+  <div class="form-group hidden" id="box-masa-k"><label>6. Masa Khamis</label><select id="masaK"><option>١.١٥-١.٤٥ ڤتڠ</option><option>١.٤٥-٢.٤٥ ڤتڠ</option><option>٢.٤٥-٣.٤٥ ڤتڠ</option></select></div>
+
+  <div class="form-group" style="background: #f0fdf4; padding: 15px; border-radius: 12px; border: 1px solid #bbf7d0;">
+    <label>7. Kehadiran</label>
+    <div style="display: grid; grid-template-columns: 1fr 1fr 1.2fr; gap: 10px;">
+        <div><small>Lelaki</small><input type="number" id="hadir_l" value="0" oninput="autoJumlah()"></div>
+        <div><small>Perempuan</small><input type="number" id="hadir_p" value="0" oninput="autoJumlah()"></div>
+        <div><small>Bilangan Murid (Hadir/Jumlah)</small><input type="text" id="hadir_total" value="0/35"></div>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label>8. Standard Kandungan</label>
+    <select id="sk_select" onchange="updateSKManual()" style="margin-bottom: 10px;">
+        <option value="">-- Pilih Standard Kandungan --</option>
+        <option value="سورة الفاتحة&#10;سورة الإخلاص&#10;سورة الفلق&#10;سورة الأناس&#10;سورة المسد">A) سورة الفاتحة، الإخلاص، الفلق، الأناس، المسد</option>
+        <option value="اقرأ ١-٣ : ١٤&#10;اقرأ ٤-٦ : ١٥&#10;مقدم : ١&#10;موک سورت ١-١٠٠ : ٥&#10;موک سورت ١٠١-٢٠٠ : ١&#10;موک سورت ٢٠١-٣٠٠ : ٠&#10;موک سورت ٣٠١-٤٠٠ : ٠&#10;موک سورت ٤٠١-٥٠٠ : ٠&#10;موک سورت ٥٠١-٦٠٤ : ٠">B) اقرأ ١-٦، مقدم، موک سورت</option>
+        <option value="lain">C) Lain-lain</option>
+    </select>
+    <textarea id="sk" rows="3" placeholder="Masukkan Standard Kandungan..."></textarea>
+  </div>
+  
+  <div class="form-group">
+    <label>9. Kemahiran (Boleh pilih banyak)</label>
+    <div class="kemahiran-grid">
+      <label class="check-item"><input type="checkbox" name="kemahiran" value="ممباچ"> <span>ممباچ</span></label>
+      <label class="check-item"><input type="checkbox" name="kemahiran" value="مڽاتاکن"> <span>مڽاتاکن</span></label>
+      <label class="check-item"><input type="checkbox" name="kemahiran" value="مڽبوت"> <span>مڽبوت</span></label>
+      <label class="check-item"><input type="checkbox" name="kemahiran" value="مماهامي"> <span>مماهامي</span></label>
+      <label class="check-item"><input type="checkbox" name="kemahiran" value="مڠحفظ"> <span>مڠحفظ</span></label>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label>10. Standard Pembelajaran</label>
+    <select id="sp_select" onchange="updateSPManual()" style="margin-bottom: 10px;">
+        <option value="">-- Pilih Standard Pembelajaran --</option>
+        <option value="موريد داڤت :&#10;١. ممباچ&#10;٢. مڽبوت">A) موريد داڤت : ممباچ, مڽبوت</option>
+        <option value="موريد داڤت :&#10;١. مڽاتاكن&#10;٢. مماهامي">B) موريد داڤت : مڽاتاكن, مماهامي</option>
+        <option value="موريد داڤت ممباچ دڠن لنچر دان برتجويد">C) موريد داڤت ممباچ دڠن لنچر دان برتجويد</option>
+    </select>
+    <textarea id="sp" rows="4" placeholder="Masukkan Standard Pembelajaran..."></textarea>
+  </div>
+
+  <div class="form-group">
+    <label>11. Aktiviti</label>
+    <select id="aktiviti_select" onchange="updateAktivitiManual()" style="margin-bottom: 10px;">
+        <option value="">-- Pilih Aktiviti --</option>
+        <option value="١. ݢورو منوليس نوتا ريڠکس دڤاڤان ڤوتيه&#10;٢. ݢورو منرڠکن برکاءيتن نوتا ترسبوت&#10;٣. ݢورو برسوءال جواب دڠن ڤلاجر سچارا راوق&#10;٤. ݢورو مڽيمق بوکو ڤلاجر سمبيل برسوءال جواب سچارا ايديۏيدو">Pertama : نوتا, منرڠکن, برسوءال جواب, مڽيمق بوکو</option>
+        <option value="١. ݢورو برسوءال جواب دڠن ڤلاجر سچارا ايديۏيدو ڤد ڤلاجرن لڤس&#10;٢. ݢورو ممبوات ڤرماءينن برسام ڤلاجر">Kedua : برسوءال جواب ايديۏيدو, ڤرماءينن</option>
+        <option value="موريد ممباچ دان ݢورو مندڠر سرتا بتولکن يڠ ساله">Ketiga : موريد ممباچ دان ݢورو مندڠر</option>
+        <option value="١. موريد ممباچ براماي-راماي&#10;٢. موريد ممباچ مڠيكوت كومڤولن&#10;٣. گورو تبوق اية موريد سمبوڠ">Keempat : براماي-راماي, كومڤولن, تبوق اية</option>
+    </select>
+    <textarea id="aktiviti" rows="4" placeholder="Masukkan atau edit aktiviti di sini..."></textarea>
+  </div>
+
+  <div class="form-group" style="background: #fdf2f2; padding: 15px; border-radius: 12px; border: 1px solid #fecaca;">
+    <label>12. Refleksi</label>
+    
+    <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+        <button type="button" onclick="pilihRefleksi('madah')" id="btnMadah" style="flex:1; padding: 8px; border-radius: 8px; border: 1px solid #ef4444; background: #ef4444; color: white; cursor: pointer; font-weight: bold;">Madah</button>
+        <button type="button" onclick="pilihRefleksi('tilawah')" id="btnTilawah" style="flex:1; padding: 8px; border-radius: 8px; border: 1px solid #ddd; background: #fff; cursor: pointer; font-weight: bold;">Tilawah</button>
+    </div>
+
+    <div id="box-ref-madah">
+        <div style="display:flex; align-items:center; gap:10px; margin-bottom:10px;">
+          <input type="number" id="ref1" value="17" style="width:70px;"> <span>موريد مڠواساءي</span>
+        </div>
+        <div style="display:flex; align-items:center; gap:10px;">
+          <input type="number" id="ref2" value="6" style="width:70px;"> <span>موريد ممرلوكن بيمبيڠن</span>
+        </div>
+    </div>
+
+    <div id="box-ref-tilawah" class="hidden">
+        <div style="display:flex; align-items:center; gap:10px; margin-bottom:8px;">
+          <input type="number" id="ref_lancar_val" value="3" style="width:70px;"> <span>لنچر</span>
+        </div>
+        <div style="display:flex; align-items:center; gap:10px; margin-bottom:8px;">
+          <input type="number" id="ref_kurang_val" value="14" style="width:70px;"> <span>کورڠ لنچر</span>
+        </div>
+        <div style="display:flex; align-items:center; gap:10px;">
+          <input type="number" id="ref_tidak_val" value="11" style="width:70px;"> <span>تيدق لنچر</span>
+        </div>
+    </div>
+  </div>
+
+  <button class="btn-submit" id="btnHantar" onclick="hantarRPH()">SIMPAN REKOD</button>
+  <button class="btn-submit hidden" id="btnBatal" onclick="batalEdit()" style="background:#6b7280; margin-top:10px;">BATAL EDIT</button>
+
+  <hr style="margin: 40px 0; border: 1px dashed #eee;">
+  <div id="kadBox" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;"></div>
+</div>
+
+<div id="myModal" class="modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3 style="margin:0; color:#0052ff;">Butiran Penuh e-RPH</h3>
+      <span class="close-modal" onclick="tutupModal()">&times;</span>
+    </div>
+    <div id="modalBody"></div>
+  </div>
+</div>
+
+<script>
+  let senaraiData = [];
+  let modeRefleksi = 'madah';
+
+  function autoJumlah() {
+    const l = parseInt(document.getElementById('hadir_l').value) || 0;
+    const p = parseInt(document.getElementById('hadir_p').value) || 0;
+    const jumlah = l + p;
+    const totalField = document.getElementById('hadir_total').value;
+    const bahagian = totalField.split('/');
+    const maxMurid = bahagian[1] ? bahagian[1].trim() : '35';
+    document.getElementById('hadir_total').value = jumlah + '/' + maxMurid;
+  }
+
+  function updateSKManual() {
+    const sel = document.getElementById('sk_select');
+    if(sel.value !== "" && sel.value !== "lain") {
+        document.getElementById('sk').value = sel.value;
+    } else if(sel.value === "lain") {
+        document.getElementById('sk').value = "";
+        document.getElementById('sk').focus();
+    }
+  }
+
+  function updateSPManual() {
+    const sel = document.getElementById('sp_select');
+    if(sel.value !== "") {
+        document.getElementById('sp').value = sel.value;
+    }
+  }
+
+  function updateAktivitiManual() {
+    const sel = document.getElementById('aktiviti_select');
+    if(sel.value !== "") {
+        document.getElementById('aktiviti').value = sel.value;
+    }
+  }
+
+  function pilihRefleksi(mode) {
+      modeRefleksi = mode;
+      const bMadah = document.getElementById('btnMadah');
+      const bTilawah = document.getElementById('btnTilawah');
+      const boxMadah = document.getElementById('box-ref-madah');
+      const boxTilawah = document.getElementById('box-ref-tilawah');
+
+      if(mode === 'madah') {
+          boxMadah.classList.remove('hidden'); boxTilawah.classList.add('hidden');
+          bMadah.style.background = "#ef4444"; bMadah.style.color = "white"; bMadah.style.borderColor = "#ef4444";
+          bTilawah.style.background = "#fff"; bTilawah.style.color = "#374151"; bTilawah.style.borderColor = "#ddd";
+      } else {
+          boxMadah.classList.add('hidden'); boxTilawah.classList.remove('hidden');
+          bTilawah.style.background = "#ef4444"; bTilawah.style.color = "white"; bTilawah.style.borderColor = "#ef4444";
+          bMadah.style.background = "#fff"; bMadah.style.color = "#374151"; bMadah.style.borderColor = "#ddd";
+      }
+  }
+
+  function muatRekod() {
+    const box = document.getElementById('kadBox');
+    box.innerHTML = "<p style='text-align:center; color:#666;'>Memuatkan rekod...</p>";
+    fetch(scriptURL).then(res => res.json()).then(data => {
+      senaraiData = data;
+      box.innerHTML = "";
+      data.reverse().forEach(item => {
+        box.innerHTML += `
+          <div class="rph-card" id="card-${item.row}">
+            <div style="display:flex; justify-content:space-between; align-items:start;">
+               <span class="card-tag">${item.hari} | ${item.tarikh} | M${item.minggu}</span>
+               <button class="btn-copy-mini" onclick="salinSemua('${item.row}')">COPY ALL</button>
+            </div>
+            <div style="font-weight:800; margin-top:10px;">${item.subjek} (${item.kelas})</div>
+            <div style="color:#0052ff; font-weight:bold; font-size:12px; margin-top:5px; line-height:1.4;">${item.refleksi}</div>
+            <div class="card-actions">
+                <button class="btn-lihat" onclick="lihatData('${item.row}')">LIHAT</button>
+                <button class="btn-edit-card" onclick="isiBorangEdit('${item.row}')">EDIT</button>
+                <button class="btn-padam" onclick="padamRekod('${item.row}')">PADAM</button>
+            </div>
+          </div>`;
+      });
+    });
+  }
+
+  function lihatData(rowNum) {
+    const item = senaraiData.find(x => x.row == rowNum);
+    if(!item) return;
+    const masa = (item.hari === 'Khamis') ? item.masaK : item.masaAI;
+    const body = document.getElementById('modalBody');
+    
+    const createRow = (label, val) => {
+        if(!val) val = "-";
+        const cleanVal = val.toString().replace(/<br>/g, '\n');
+        return `
+        <div class="info-row">
+            <div class="info-label">
+                ${label}
+                <button class="btn-copy-mini" onclick="salinTeks(this, \`${cleanVal.replace(/`/g, '\\`').replace(/\${/g, '\\${')}\`)">COPY</button>
+            </div>
+            <div class="info-val" style="white-space: pre-wrap;">${val}</div>
+        </div>`;
+    };
+
+    body.innerHTML = `
+      ${createRow("Tarikh / Hari / Minggu", `${item.tarikh} | ${item.hari} (M${item.minggu})`)}
+      ${createRow("Subjek / Kelas", `${item.subjek} - ${item.kelas}`)}
+      ${createRow("Masa", masa)}
+      ${createRow("Kehadiran", item.kehadiran || "-")}
+      ${createRow("Standard Kandungan", item.sk)}
+      ${createRow("Kemahiran", item.kemahiran)}
+      ${createRow("Standard Pembelajaran", item.sp)}
+      ${createRow("Aktiviti", item.aktiviti)}
+      ${createRow("Refleksi", item.refleksi)}
+    `;
+    document.getElementById('myModal').style.display = "block";
+  }
+
+  function salinTeks(btn, teks) {
+    navigator.clipboard.writeText(teks).then(() => {
+        const asal = btn.innerText;
+        btn.innerText = "COPIED!";
+        btn.style.background = "#10b981";
+        btn.style.color = "white";
+        setTimeout(() => {
+            btn.innerText = asal;
+            btn.style.background = "";
+            btn.style.color = "";
+        }, 1500);
+    });
+  }
+  
+  function salinSemua(rowNum) {
+    const item = senaraiData.find(x => x.row == rowNum);
+    const masa = (item.hari === 'Khamis') ? item.masaK : item.masaAI;
+    const teks = `TARIKH: ${item.tarikh} (${item.hari})\nMINGGU: ${item.minggu}\nSUBJEK: ${item.subjek} (${item.kelas})\nMASA: ${masa}\nKEHADIRAN: ${item.kehadiran || "-"}\nSK: ${item.sk}\nSP: ${item.sp}\nKEMAHIRAN: ${item.kemahiran}\nAKTIVITI: ${item.aktiviti}\nREFLEKSI: ${item.refleksi.replace(/<br>/g, '')}`;
+    navigator.clipboard.writeText(teks).then(() => alert("Semua maklumat disalin!"));
+  }
+
+  function padamRekod(rowNum) {
+    if(confirm("Adakah anda pasti mahu memadam rekod ini?")) {
+        const btn = event.target;
+        btn.innerText = "...";
+        btn.disabled = true;
+        fetch(scriptURL + "?action=deleteRPH&row=" + rowNum, { method: 'POST' })
+        .then(() => {
+            alert("Rekod berjaya dipadam!");
+            muatRekod();
+        })
+        .catch(() => {
+            alert("Ralat memadam!");
+            btn.innerText = "PADAM";
+            btn.disabled = false;
+        });
+    }
+  }
+
+  function tutupModal() { document.getElementById('myModal').style.display = "none"; }
+
+  function getSelectedKemahiran() {
+    const cb = document.querySelectorAll('input[name="kemahiran"]:checked');
+    let v = []; cb.forEach(c => v.push(c.value)); return v.join(', ');
+  }
+
+  function hantarRPH() {
+    const btn = document.getElementById('btnHantar');
+    btn.innerText = "PROSES..."; btn.disabled = true;
+    
+    const row = document.getElementById('editRow').value;
+    const action = row ? "updateRPH" : "simpanRPH";
+    const hari = document.getElementById('hari').value;
+    const tarikh = document.getElementById('tarikh').value;
+    
+    const hl = document.getElementById('hadir_l').value || '0';
+    const hp = document.getElementById('hadir_p').value || '0';
+    const htotal = document.getElementById('hadir_total').value;
+    const kehadiranPenuh = `Lelaki: ${hl} | Perempuan: ${hp} | Jumlah: ${htotal}`;
+
+    let refPenuh = "";
+    if(modeRefleksi === 'madah') {
+        const r1 = document.getElementById('ref1').value;
+        const r2 = document.getElementById('ref2').value;
+        refPenuh = `${r1} موريد مڠواساءي | ${r2} ممرلوكن بيمبيڠن`;
+    } else {
+        const rl = document.getElementById('ref_lancar_val').value;
+        const rk = document.getElementById('ref_kurang_val').value;
+        const rt = document.getElementById('ref_tidak_val').value;
+        refPenuh = `${rl} لنچر | ${rk} کورڠ لنچر | ${rt} تيدق لنچر`;
+    }
+    
+    const aktFinal = document.getElementById('aktiviti').value;
+
+    const p = `action=${action}&row=${row}&hari=${hari}&tarikh=${tarikh}&minggu=${v('minggu')}&subjek=${v('subjek')}&kelas=${v('kelas')}&masaAI=${v('masaAI')}&masaK=${v('masaK')}&kehadiran=${encodeURIComponent(kehadiranPenuh)}&sk=${v('sk')}&kemahiran=${encodeURIComponent(getSelectedKemahiran())}&sp=${v('sp')}&aktiviti=${encodeURIComponent(aktFinal)}&refleksi=${encodeURIComponent(refPenuh)}`;
+    
+    fetch(scriptURL + "?" + p, { method: 'POST' }).then(() => { 
+        alert("Berjaya!"); 
+        btn.innerText = "SIMPAN REKOD"; btn.disabled = false;
+        batalEdit(); muatRekod(); 
+    });
+  }
+
+  function isiBorangEdit(rowNum) {
+    const item = senaraiData.find(x => x.row == rowNum);
+    if(!item) return;
+    document.getElementById('editRow').value = rowNum;
+    document.getElementById('hari').value = item.hari;
+    document.getElementById('tarikh').value = item.tarikh;
+    document.getElementById('minggu').value = item.minggu;
+    document.getElementById('subjek').value = item.subjek;
+    document.getElementById('kelas').value = item.kelas;
+    document.getElementById('sk').value = item.sk;
+    document.getElementById('sk_select').value = "";
+    document.getElementById('sp').value = item.sp;
+    document.getElementById('aktiviti').value = item.aktiviti;
+    document.getElementById('aktiviti_select').value = "";
+
+    if(item.refleksi.includes('لنچر')) {
+        pilihRefleksi('tilawah');
+    } else {
+        pilihRefleksi('madah');
+    }
+
+    document.querySelectorAll('input[name="kemahiran"]').forEach(cb => { 
+        cb.checked = item.kemahiran.includes(cb.value); 
+    });
+    toggleMasa();
+    if(item.hari === 'Khamis') document.getElementById('masaK').value = item.masaK;
+    else document.getElementById('masaAI').value = item.masaAI;
+    document.getElementById('formTitle').innerText = "KEMASKINI REKOD";
+    document.getElementById('btnBatal').classList.remove('hidden');
+    window.scrollTo({top: 0, behavior: 'smooth'});
+  }
+
+  function batalEdit() {
+    document.getElementById('editRow').value = "";
+    document.getElementById('formTitle').innerText = "Mini e-RPH";
+    document.getElementById('btnBatal').classList.add('hidden');
+    document.getElementById('sk').value = "";
+    document.getElementById('sk_select').value = "";
+    document.getElementById('sp').value = "";
+    document.getElementById('sp_select').value = "";
+    document.getElementById('tarikh').value = "";
+    document.getElementById('aktiviti').value = "";
+    document.getElementById('aktiviti_select').value = "";
+    document.getElementById('hadir_l').value = "0";
+    document.getElementById('hadir_p').value = "0";
+    document.getElementById('hadir_total').value = "0/35";
+    document.querySelectorAll('input[name="kemahiran"]').forEach(cb => cb.checked = false);
+  }
+
+  function v(id) { return encodeURIComponent(document.getElementById(id).value); }
+  function toggleMasa() {
+    const h = document.getElementById('hari').value;
+    document.getElementById('box-masa-ai').classList.toggle('hidden', h === 'Khamis');
+    document.getElementById('box-masa-k').classList.toggle('hidden', h !== 'Khamis');
+  }
+  window.onload = muatRekod;
+</script>
