@@ -1,0 +1,148 @@
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&family=Amiri&display=swap');
+
+  :root {
+    --primary: #0f172a;
+    --accent: #38bdf8;
+    --card-bg: #ffffff;
+    --text-main: #1e293b;
+    --text-muted: #64748b;
+    --border: #e2e8f0;
+  }
+
+  .fintech-dashboard {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    max-width: 900px;
+    margin: 20px auto;
+    background: #f8fafc;
+    padding: 30px;
+    border-radius: 28px;
+  }
+
+  /* Welcome Section */
+  .welcome-section {
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+    color: white;
+    padding: 40px;
+    border-radius: 24px;
+    text-align: center;
+    margin-bottom: 30px;
+    box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);
+  }
+  .welcome-section h2 { font-family: 'Amiri', serif; font-size: 28px; margin: 0; }
+  .welcome-section p { opacity: 0.8; font-family: 'Amiri', serif; font-size: 18px; margin-top: 10px; }
+
+  /* Category Section */
+  .category-group { margin-bottom: 30px; }
+  .category-title {
+    font-size: 14px;
+    font-weight: 800;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    letter-spacing: 2px;
+    margin-bottom: 15px;
+    padding-left: 5px;
+  }
+  .menu-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+  }
+  .menu-item {
+    background: var(--card-bg);
+    padding: 25px;
+    border-radius: 20px;
+    text-decoration: none;
+    color: var(--text-main);
+    border: 1px solid var(--border);
+    text-align: center;
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+  .menu-item:hover {
+    border-color: var(--accent);
+    transform: translateY(-5px);
+    box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
+  }
+  .menu-icon { font-size: 28px; }
+  .menu-item span { font-weight: 600; font-size: 14px; }
+
+  @media (max-width: 600px) {
+    .fintech-dashboard { padding: 20px; }
+    .menu-grid { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+
+<div class="fintech-dashboard">
+  <div class="welcome-section">
+    <h2 id="type-title" dir="rtl"></h2>
+    <p id="type-subtitle" dir="rtl"></p>
+  </div>
+
+  <div class="category-group">
+    <div class="category-title">Semak & Cek (Sheet)</div>
+    <div class="menu-grid">
+      <a href="https://docs.google.com/spreadsheets/d/14Z--FTqNcLt3_rUgXBC8BMgeawwoTrpWlE_03YQzXg4/edit?usp=drive_link" class="menu-item">
+        <div class="menu-icon">👥</div><span>Kehadiran</span>
+      </a>
+      <a href="https://docs.google.com/spreadsheets/d/17NjITHkDLBrFjSItn4l0h2B6nfoE15HPq1yP73NDLY/edit?usp=drive_link" class="menu-item">
+        <div class="menu-icon">📈</div><span>Prestasi</span>
+      </a>
+    </div>
+  </div>
+
+  <div class="category-group">
+    <div class="category-title">Jumlah</div>
+    <div class="menu-grid">
+      <a href="https://kafa-wan.pages.dev/kehadiran-pelajar" class="menu-item">
+        <div class="menu-icon">📊</div><span>Kehadiran</span>
+      </a>
+      <a href="https://kafa-wan.pages.dev/prestasi-bacaan" class="menu-item">
+        <div class="menu-icon">🎯</div><span>Prestasi</span>
+      </a>
+    </div>
+  </div>
+
+  <div class="category-group">
+    <div class="category-title">eRPH</div>
+    <div class="menu-grid">
+      <a href="https://kafa-wan.pages.dev/form-erph" class="menu-item">
+        <div class="menu-icon">📝</div><span>Form</span>
+      </a>
+      <a href="https://kafa-wan.pages.dev/rekod-erph" class="menu-item">
+        <div class="menu-icon">🗂️</div><span>Kad</span>
+      </a>
+    </div>
+  </div>
+</div>
+
+<script>
+(function() {
+    const titleText = "\u0627\u0644\u0633\u0644\u0627\u0645 \u0639\u0644\u064a\u0643\u0645 \u064a\u0627 \u0648\u0627\u0646 \u0627\u0644\u0648\u0633\u064a\u0645";
+    const subtitleText = "\u0643\u064a\u0641 \u062d\u0627\u0644\u0643 \u0627\u0644\u064a\u0648\u0645\u061f \u0623\u062a\u0645\u0646\u0649 \u0623\u0646 \u062a\u0643\u0648\u0646 \u062f\u0627\u0626\u0645\u0627\u064b \u0641\u064a \u062e\u064a\u0631";
+
+    function startTyping(elId, text, speed, nextFn) {
+        const el = document.getElementById(elId);
+        let i = 0;
+        const chars = Array.from(text);
+        function step() {
+            if (i < chars.length) {
+                el.innerText += chars[i];
+                i++;
+                setTimeout(step, speed);
+            } else if(nextFn) {
+                setTimeout(nextFn, 600);
+            }
+        }
+        step();
+    }
+    setTimeout(() => {
+        startTyping("type-title", titleText, 100, () => {
+            startTyping("type-subtitle", subtitleText, 50);
+        });
+    }, 500);
+})();
+</script>
