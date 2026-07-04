@@ -126,6 +126,42 @@
     opacity: 0.7;
   }
 
+  /* ── Ruang Catatan Tambahan (Premium Accent) ── */
+  .box-tambahan {
+    margin-top: 12px;
+    position: relative;
+    padding: 14px 14px 14px 16px;
+    background: linear-gradient(180deg, #f8faff 0%, #f4f7ff 100%);
+    border: 1px solid #dbe6ff;
+    border-left: 3px solid #0052ff;
+    border-radius: 10px;
+  }
+  .box-tambahan-label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.6px;
+    text-transform: uppercase;
+    color: #0052ff;
+    margin-bottom: 8px;
+  }
+  .box-tambahan-label .spark {
+    font-size: 12px;
+    filter: drop-shadow(0 1px 1px rgba(0,82,255,0.3));
+  }
+  .box-tambahan textarea {
+    border: 1.5px solid #e5edff;
+    background: #ffffff;
+    font-size: 14px;
+  }
+  .box-tambahan textarea:focus {
+    outline: none;
+    border-color: #0052ff;
+    box-shadow: 0 0 0 3px rgba(0,82,255,0.12);
+  }
+
   /* ── Mobile Responsive ── */
   @media (max-width: 600px) {
     .rph-container { margin: 10px; padding: 16px; border-radius: 14px; }
@@ -133,6 +169,7 @@
     .btn-kad-erph { padding: 10px 14px; font-size: 12px; }
     .modal-content { width: 95%; margin: 10% auto; padding: 18px; }
     .kemahiran-grid { grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 8px; padding: 12px; }
+    .box-tambahan { padding: 12px; }
   }
 </style>
 
@@ -209,6 +246,10 @@
       <label class="check-item"><input type="checkbox" name="kemahiran" value="مماهامي"> <span>مماهامي</span></label>
       <label class="check-item"><input type="checkbox" name="kemahiran" value="مڠحفظ"> <span>مڠحفظ</span></label>
     </div>
+    <div class="box-tambahan">
+      <div class="box-tambahan-label"><span class="spark">✦</span> Catatan Tambahan — Kemahiran Lain</div>
+      <textarea id="kemahiran_lain" rows="2" placeholder="Catat kemahiran tambahan yang tidak disenaraikan di atas..."></textarea>
+    </div>
   </div>
 
   <div class="form-group">
@@ -225,13 +266,23 @@
   <div class="form-group">
     <label>11. Aktiviti</label>
     <select id="aktiviti_select" onchange="updateAktivitiManual()" style="margin-bottom: 10px;">
-        <option value="">-- Pilih Aktiviti --</option>
-        <option value="١. ݢورو منوليس نوتا ريڠکس دڤاڤان ڤوتيه&#10;٢. ݢورو منرڠکن برکاءيتن نوتا ترسبوت&#10;٣. ݢورو برسوءال جواب دڠن ڤلاجر سچارا راوق&#10;٤. ݢورو مڽيمق بوکو ڤلاجر سمبيل برسوءال جواب سچارا ايديۏيدو">Pertama : نوتا, منرڠکن, برسوءال جواب, مڽيمق بوکو</option>
-        <option value="١. ݢورو برسوءال جواب دڠن ڤلاجر سچارا ايديۏيدو ڤد ڤلاجرن لڤس&#10;٢. ݢورو ممبوات ڤرماءينن برسام ڤلاجر">Kedua : برسوءال جواب ايديۏيدو, ڤرماءينن</option>
-        <option value="موريد ممباچ دان ݢورو مندڠر سرتا بتولکن يڠ ساله">Ketiga : موريد ممباچ دان ݢورو مندڠر</option>
-        <option value="١. موريد ممباچ براماي-راماي&#10;٢. موريد ممباچ مڠيكوت كومڤولن&#10;٣. گورو تبوق اية موريد سمبوڠ">Keempat : براماي-راماي, كومڤولن, تبوق اية</option>
+        <option value="">-- Pilih Aktiviti (boleh pilih lebih dari satu) --</option>
+        <option value="ݢورو منوليس نوتا ريڠکس دڤاڤان ڤوتيه">ݢورو منوليس نوتا ريڠکس دڤاڤان ڤوتيه</option>
+        <option value="ݢورو منرڠکن برکاءيتن نوتا ترسبوت">ݢورو منرڠکن برکاءيتن نوتا ترسبوت</option>
+        <option value="ݢورو برسوءال جواب دڠن ڤلاجر سچارا راوق">ݢورو برسوءال جواب دڠن ڤلاجر سچارا راوق</option>
+        <option value="ݢورو مڽيمق بوکو ڤلاجر سمبيل برسوءال جواب سچارا ايديۏيدو">ݢورو مڽيمق بوکو ڤلاجر سمبيل برسوءال جواب سچارا ايديۏيدو</option>
+        <option value="ݢورو برسوءال جواب دڠن ڤلاجر سچارا ايديۏيدو ڤد ڤلاجرن لڤس">ݢورو برسوءال جواب دڠن ڤلاجر سچارا ايديۏيدو ڤد ڤلاجرن لڤس</option>
+        <option value="ݢورو ممبوات ڤرماءينن برسام ڤلاجر">ݢورو ممبوات ڤرماءينن برسام ڤلاجر</option>
+        <option value="موريد ممباچ دان ݢورو مندڠر سرتا بتولکن يڠ ساله">موريد ممباچ دان ݢورو مندڠر سرتا بتولکن يڠ ساله</option>
+        <option value="موريد ممباچ براماي-راماي">موريد ممباچ براماي-راماي</option>
+        <option value="موريد ممباچ مڠيكوت كومڤولن">موريد ممباچ مڠيكوت كومڤولن</option>
+        <option value="گورو تبوق اية موريد سمبوڠ">گورو تبوق اية موريد سمبوڠ</option>
     </select>
-    <textarea id="aktiviti" rows="4" placeholder="Masukkan atau edit aktiviti di sini..."></textarea>
+    <textarea id="aktiviti" rows="4" placeholder="Masukkan atau edit aktiviti di sini..." onblur="renumberAktiviti()"></textarea>
+    <div class="box-tambahan">
+      <div class="box-tambahan-label"><span class="spark">✦</span> Catatan Tambahan — Aktiviti Lain</div>
+      <textarea id="aktiviti_tambahan" rows="2" placeholder="Catat aktiviti tambahan yang tidak disenaraikan di atas..."></textarea>
+    </div>
   </div>
 
   <div class="form-group" style="background: #fdf2f2; padding: 15px; border-radius: 12px; border: 1px solid #fecaca;">
@@ -312,10 +363,29 @@
     }
   }
 
+  function toJawiNumber(num) {
+    const jawiDigits = ['٠','١','٢','٣','٤','٥','٦','٧','٨','٩'];
+    return num.toString().split('').map(d => jawiDigits[parseInt(d)]).join('');
+  }
+
+  function renumberAktiviti() {
+    const textarea = document.getElementById('aktiviti');
+    const lines = textarea.value.split('\n').map(l => l.trim()).filter(l => l !== '');
+    const renumbered = lines.map((line, idx) => {
+        const bersih = line.replace(/^[٠-٩0-9]+[.\)]\s*/, '');
+        return `${toJawiNumber(idx + 1)}. ${bersih}`;
+    });
+    textarea.value = renumbered.join('\n');
+  }
+
   function updateAktivitiManual() {
     const sel = document.getElementById('aktiviti_select');
     if(sel.value !== "") {
-        document.getElementById('aktiviti').value = sel.value;
+        const textarea = document.getElementById('aktiviti');
+        const existing = textarea.value.trim();
+        textarea.value = existing ? `${existing}\n${sel.value}` : sel.value;
+        sel.value = "";
+        renumberAktiviti();
     }
   }
 
@@ -438,7 +508,13 @@
 
   function getSelectedKemahiran() {
     const cb = document.querySelectorAll('input[name="kemahiran"]:checked');
-    let v = []; cb.forEach(c => v.push(c.value)); return v.join(', ');
+    let v = []; cb.forEach(c => v.push(c.value));
+    let hasil = v.join(', ');
+    const tambahan = document.getElementById('kemahiran_lain').value.trim();
+    if(tambahan) {
+        hasil = hasil ? `${hasil} | Lain-lain: ${tambahan}` : `Lain-lain: ${tambahan}`;
+    }
+    return hasil;
   }
 
   function hantarRPH() {
@@ -467,9 +543,15 @@
         refPenuh = `${rl} لنچر | ${rk} کورڠ لنچر | ${rt} تيدق لنچر`;
     }
     
-    const aktFinal = document.getElementById('aktiviti').value;
+    let aktFinal = document.getElementById('aktiviti').value;
+    const aktTambahan = document.getElementById('aktiviti_tambahan').value.trim();
+    if(aktTambahan) {
+        aktFinal = aktFinal ? `${aktFinal}\n\n[Tambahan]: ${aktTambahan}` : `[Tambahan]: ${aktTambahan}`;
+    }
 
-    const p = `action=${action}&row=${row}&hari=${hari}&tarikh=${tarikh}&minggu=${v('minggu')}&subjek=${v('subjek')}&kelas=${v('kelas')}&masaAI=${v('masaAI')}&masaK=${v('masaK')}&kehadiran=${encodeURIComponent(kehadiranPenuh)}&sk=${v('sk')}&kemahiran=${encodeURIComponent(getSelectedKemahiran())}&sp=${v('sp')}&aktiviti=${encodeURIComponent(aktFinal)}&refleksi=${encodeURIComponent(refPenuh)}`;
+    const kemahiranFinal = getSelectedKemahiran();
+
+    const p = `action=${action}&row=${row}&hari=${hari}&tarikh=${tarikh}&minggu=${v('minggu')}&subjek=${v('subjek')}&kelas=${v('kelas')}&masaAI=${v('masaAI')}&masaK=${v('masaK')}&kehadiran=${encodeURIComponent(kehadiranPenuh)}&sk=${v('sk')}&kemahiran=${encodeURIComponent(kemahiranFinal)}&sp=${v('sp')}&aktiviti=${encodeURIComponent(aktFinal)}&refleksi=${encodeURIComponent(refPenuh)}`;
     
     fetch(scriptURL + "?" + p, { method: 'POST' }).then(() => { 
         alert("Berjaya!"); 
@@ -490,7 +572,17 @@
     document.getElementById('sk').value = item.sk;
     document.getElementById('sk_select').value = "";
     document.getElementById('sp').value = item.sp;
-    document.getElementById('aktiviti').value = item.aktiviti;
+
+    let aktivitiStr = item.aktiviti || "";
+    let aktivitiTambahan = "";
+    if(aktivitiStr.includes('[Tambahan]:')) {
+        const aparts = aktivitiStr.split('[Tambahan]:');
+        aktivitiStr = aparts[0].replace(/\n\n$/, '').trim();
+        aktivitiTambahan = aparts[1] ? aparts[1].trim() : "";
+    }
+    document.getElementById('aktiviti').value = aktivitiStr;
+    renumberAktiviti();
+    document.getElementById('aktiviti_tambahan').value = aktivitiTambahan;
     document.getElementById('aktiviti_select').value = "";
 
     if(item.refleksi.includes('لنچر')) {
@@ -499,9 +591,18 @@
         pilihRefleksi('madah');
     }
 
+    let kemahiranStr = item.kemahiran || "";
+    let kemahiranTambahan = "";
+    if(kemahiranStr.includes('Lain-lain:')) {
+        const kparts = kemahiranStr.split('Lain-lain:');
+        kemahiranStr = kparts[0].replace(/\|\s*$/, '').trim();
+        kemahiranTambahan = kparts[1] ? kparts[1].trim() : "";
+    }
     document.querySelectorAll('input[name="kemahiran"]').forEach(cb => { 
-        cb.checked = item.kemahiran.includes(cb.value); 
+        cb.checked = kemahiranStr.includes(cb.value); 
     });
+    document.getElementById('kemahiran_lain').value = kemahiranTambahan;
+
     toggleMasa();
     if(item.hari === 'Khamis') document.getElementById('masaK').value = item.masaK;
     else document.getElementById('masaAI').value = item.masaAI;
@@ -521,6 +622,8 @@
     document.getElementById('tarikh').value = "";
     document.getElementById('aktiviti').value = "";
     document.getElementById('aktiviti_select').value = "";
+    document.getElementById('aktiviti_tambahan').value = "";
+    document.getElementById('kemahiran_lain').value = "";
     document.getElementById('hadir_l').value = "0";
     document.getElementById('hadir_p').value = "0";
     document.getElementById('hadir_total').value = "0/35";
