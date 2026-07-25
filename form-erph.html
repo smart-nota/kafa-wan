@@ -214,8 +214,22 @@
   <div class="form-group"><label>4. Mata Pelajaran</label><input type="text" id="subjek"></div>
   <div class="form-group"><label>5. Kelas</label><select id="kelas"><option>٢ سيدينا ابو بكر</option><option>٢ سيدينا عمر</option><option>٢ سيدنا عثمان</option><option>٢ سيدنا علي</option></select></div>
 
-  <div class="form-group" id="box-masa-ai"><label>6. Masa Ahad & Isnin</label><select id="masaAI"><option>١.٤٥-٢.١٥ ڤتڠ</option><option>٢.١٥-٣.١٥ ڤتڠ</option><option>٣.١٥-٤.١٥ ڤتڠ</option></select></div>
-  <div class="form-group hidden" id="box-masa-k"><label>6. Masa Khamis</label><select id="masaK"><option>١.١٥-١.٤٥ ڤتڠ</option><option>١.٤٥-٢.٤٥ ڤتڠ</option><option>٢.٤٥-٣.٤٥ ڤتڠ</option></select></div>
+  <div class="form-group" id="box-masa-ai">
+    <label>6. Masa Ahad & Isnin</label>
+    <select id="masaAI"><option>١.٤٥-٢.١٥ ڤتڠ</option><option>٢.١٥-٣.١٥ ڤتڠ</option><option>٣.١٥-٤.١٥ ڤتڠ</option></select>
+    <div class="box-tambahan">
+      <div class="box-tambahan-label"><span class="spark">✦</span> Catatan Tambahan — Masa Manual (Rumi)</div>
+      <textarea id="masaAI_manual" rows="2" placeholder="Contoh: 1.45-2.15 — auto jadi jawi + ڤتڠ selepas simpan"></textarea>
+    </div>
+  </div>
+  <div class="form-group hidden" id="box-masa-k">
+    <label>6. Masa Khamis</label>
+    <select id="masaK"><option>١.١٥-١.٤٥ ڤتڠ</option><option>١.٤٥-٢.٤٥ ڤتڠ</option><option>٢.٤٥-٣.٤٥ ڤتڠ</option></select>
+    <div class="box-tambahan">
+      <div class="box-tambahan-label"><span class="spark">✦</span> Catatan Tambahan — Masa Manual (Rumi)</div>
+      <textarea id="masaK_manual" rows="2" placeholder="Contoh: 1.15-1.45 — auto jadi jawi + ڤتڠ selepas simpan"></textarea>
+    </div>
+  </div>
 
   <div class="form-group" style="background: #f0fdf4; padding: 15px; border-radius: 12px; border: 1px solid #bbf7d0;">
     <label>7. Kehadiran</label>
@@ -256,9 +270,10 @@
     <label>10. Standard Pembelajaran</label>
     <select id="sp_select" onchange="updateSPManual()" style="margin-bottom: 10px;">
         <option value="">-- Pilih Standard Pembelajaran --</option>
-        <option value="موريد داڤت :&#10;١. ممباچ&#10;٢. مڽبوت">A) موريد داڤت : ممباچ, مڽبوت</option>
-        <option value="موريد داڤت :&#10;١. مڽاتاكن&#10;٢. مماهامي">B) موريد داڤت : مڽاتاكن, مماهامي</option>
-        <option value="موريد داڤت ممباچ دڠن لنچر دان برتجويد">C) موريد داڤت ممباچ دڠن لنچر دان برتجويد</option>
+        <option value="داخير ڤمبلاجرن، موريد داڤت :&#10;١. ممباچ تنتڠ ڤمبلاجرن دڠن لنچر&#10;٢. مپبوت تنتڠ ڤمبلاجرن دڠن بتول">ا) ممباچ دان مپبوت</option>
+        <option value="داخير ڤمبلاجرن، موريد داڤت :&#10;١. مپاتاكن تنتڠ ڤمبلاجرن دڠن لنچر&#10;٢. مماهامي تنتڠ ڤمبلاجرن دڠن بتول">ب) مپاتاكن دان مماهامي</option>
+        <option value="داخير ڤمبلاجرن، موريد داڤت :&#10;١. ممباچ القراءن دڠن لنچر&#10;٢. مپبوت حوروف دان باچاءن دالم إقراء دڠن بتول">ج) تلاوة</option>
+        <option value="داخير ڤمبلاجرن، موريد داڤت :&#10;١. ممباچ سورة لازيم دڠن بتول&#10;٢. مڠحفظ سورة ترڤيليه دڠن لنچر">د) حفظن</option>
     </select>
     <textarea id="sp" rows="4" placeholder="Masukkan Standard Pembelajaran..."></textarea>
   </div>
@@ -267,16 +282,14 @@
     <label>11. Aktiviti</label>
     <select id="aktiviti_select" onchange="updateAktivitiManual()" style="margin-bottom: 10px;">
         <option value="">-- Pilih Aktiviti (boleh pilih lebih dari satu) --</option>
-        <option value="ݢورو منوليس نوتا ريڠکس دڤاڤان ڤوتيه">ݢورو منوليس نوتا ريڠکس دڤاڤان ڤوتيه</option>
-        <option value="ݢورو منرڠکن برکاءيتن نوتا ترسبوت">ݢورو منرڠکن برکاءيتن نوتا ترسبوت</option>
-        <option value="ݢورو برسوءال جواب دڠن ڤلاجر سچارا راوق">ݢورو برسوءال جواب دڠن ڤلاجر سچارا راوق</option>
-        <option value="ݢورو مڽيمق بوکو ڤلاجر سمبيل برسوءال جواب سچارا ايديۏيدو">ݢورو مڽيمق بوکو ڤلاجر سمبيل برسوءال جواب سچارا ايديۏيدو</option>
-        <option value="ݢورو برسوءال جواب دڠن ڤلاجر سچارا ايديۏيدو ڤد ڤلاجرن لڤس">ݢورو برسوءال جواب دڠن ڤلاجر سچارا ايديۏيدو ڤد ڤلاجرن لڤس</option>
-        <option value="ݢورو ممبوات ڤرماءينن برسام ڤلاجر">ݢورو ممبوات ڤرماءينن برسام ڤلاجر</option>
-        <option value="موريد ممباچ دان ݢورو مندڠر سرتا بتولکن يڠ ساله">موريد ممباچ دان ݢورو مندڠر سرتا بتولکن يڠ ساله</option>
-        <option value="موريد ممباچ براماي-راماي">موريد ممباچ براماي-راماي</option>
-        <option value="موريد ممباچ مڠيكوت كومڤولن">موريد ممباچ مڠيكوت كومڤولن</option>
-        <option value="گورو تبوق اية موريد سمبوڠ">گورو تبوق اية موريد سمبوڠ</option>
+        <option value="موريد منوليس نوتا دڤاڤن ڤوتيه">موريد منوليس نوتا دڤاڤن ڤوتيه</option>
+        <option value="موريد مندڠر ڤنراڠن درڤد گورو">موريد مندڠر ڤنراڠن درڤد گورو</option>
+        <option value="موريد داوجي دڠن سوالن سچارا راوق">موريد داوجي دڠن سوالن سچارا راوق</option>
+        <option value="بوكو موريد دسيمق سمبيل گورو برسوال جواب سچارا ايديۏيدو">بوكو موريد دسيمق سمبيل گورو برسوال جواب سچارا ايديۏيدو</option>
+        <option value="موريد بلاجر دان برسوال جواب سمبيل برماءين">موريد بلاجر دان برسوال جواب سمبيل برماءين</option>
+        <option value="موريد ممباچ دان گورو مندڠر سرت بتولكن يڠ ساله">موريد ممباچ دان گورو مندڠر سرت بتولكن يڠ ساله</option>
+        <option value="موريد ممباچ سچارا براماي-راماي دان بركومڤولن">موريد ممباچ سچارا براماي-راماي دان بركومڤولن</option>
+        <option value="موريد منجواب حفظن يڠ دتبوق گورو">موريد منجواب حفظن يڠ دتبوق گورو</option>
     </select>
     <textarea id="aktiviti" rows="4" placeholder="Masukkan atau edit aktiviti di sini..." onblur="renumberAktiviti()"></textarea>
     <div class="box-tambahan">
@@ -366,6 +379,29 @@
   function toJawiNumber(num) {
     const jawiDigits = ['٠','١','٢','٣','٤','٥','٦','٧','٨','٩'];
     return num.toString().split('').map(d => jawiDigits[parseInt(d)]).join('');
+  }
+
+  function toJawiMasa(rumiText) {
+    if(!rumiText) return "";
+    const jawiDigits = ['٠','١','٢','٣','٤','٥','٦','٧','٨','٩'];
+    let hasil = rumiText.trim().split('').map(ch => {
+        if(ch >= '0' && ch <= '9') return jawiDigits[ch.charCodeAt(0) - 48];
+        return ch;
+    }).join('');
+    if(!hasil.includes('ڤتڠ')) {
+        hasil = hasil + ' ڤتڠ';
+    }
+    return hasil;
+  }
+
+  function setMasaField(selectId, manualId, value) {
+    const select = document.getElementById(selectId);
+    select.value = value;
+    if(select.value !== value) {
+        document.getElementById(manualId).value = value || "";
+    } else {
+        document.getElementById(manualId).value = "";
+    }
   }
 
   function renumberAktiviti() {
@@ -525,6 +561,11 @@
     const action = row ? "updateRPH" : "simpanRPH";
     const hari = document.getElementById('hari').value;
     const tarikh = document.getElementById('tarikh').value;
+
+    const masaAIManual = document.getElementById('masaAI_manual').value.trim();
+    const masaKManual = document.getElementById('masaK_manual').value.trim();
+    const masaAIFinal = masaAIManual ? toJawiMasa(masaAIManual) : document.getElementById('masaAI').value;
+    const masaKFinal = masaKManual ? toJawiMasa(masaKManual) : document.getElementById('masaK').value;
     
     const hl = document.getElementById('hadir_l').value || '0';
     const hp = document.getElementById('hadir_p').value || '0';
@@ -551,7 +592,7 @@
 
     const kemahiranFinal = getSelectedKemahiran();
 
-    const p = `action=${action}&row=${row}&hari=${hari}&tarikh=${tarikh}&minggu=${v('minggu')}&subjek=${v('subjek')}&kelas=${v('kelas')}&masaAI=${v('masaAI')}&masaK=${v('masaK')}&kehadiran=${encodeURIComponent(kehadiranPenuh)}&sk=${v('sk')}&kemahiran=${encodeURIComponent(kemahiranFinal)}&sp=${v('sp')}&aktiviti=${encodeURIComponent(aktFinal)}&refleksi=${encodeURIComponent(refPenuh)}`;
+    const p = `action=${action}&row=${row}&hari=${hari}&tarikh=${tarikh}&minggu=${v('minggu')}&subjek=${v('subjek')}&kelas=${v('kelas')}&masaAI=${encodeURIComponent(masaAIFinal)}&masaK=${encodeURIComponent(masaKFinal)}&kehadiran=${encodeURIComponent(kehadiranPenuh)}&sk=${v('sk')}&kemahiran=${encodeURIComponent(kemahiranFinal)}&sp=${v('sp')}&aktiviti=${encodeURIComponent(aktFinal)}&refleksi=${encodeURIComponent(refPenuh)}`;
     
     fetch(scriptURL + "?" + p, { method: 'POST' }).then(() => { 
         alert("Berjaya!"); 
@@ -604,8 +645,8 @@
     document.getElementById('kemahiran_lain').value = kemahiranTambahan;
 
     toggleMasa();
-    if(item.hari === 'Khamis') document.getElementById('masaK').value = item.masaK;
-    else document.getElementById('masaAI').value = item.masaAI;
+    if(item.hari === 'Khamis') setMasaField('masaK', 'masaK_manual', item.masaK);
+    else setMasaField('masaAI', 'masaAI_manual', item.masaAI);
     document.getElementById('formTitle').innerText = "KEMASKINI REKOD";
     document.getElementById('btnBatal').classList.remove('hidden');
     window.scrollTo({top: 0, behavior: 'smooth'});
@@ -624,6 +665,8 @@
     document.getElementById('aktiviti_select').value = "";
     document.getElementById('aktiviti_tambahan').value = "";
     document.getElementById('kemahiran_lain').value = "";
+    document.getElementById('masaAI_manual').value = "";
+    document.getElementById('masaK_manual').value = "";
     document.getElementById('hadir_l').value = "0";
     document.getElementById('hadir_p').value = "0";
     document.getElementById('hadir_total').value = "0/35";
