@@ -74,6 +74,83 @@
     .fintech-dashboard { padding: 20px; }
     .menu-grid { grid-template-columns: 1fr 1fr; }
   }
+
+  /* --- Additions: RPH Online cards + credential copy card --- */
+  .menu-item-link {
+    text-decoration: none;
+    color: inherit;
+  }
+  .rph-card {
+    justify-content: flex-start;
+  }
+  .rph-card-badge {
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--accent);
+    background: rgba(56, 189, 248, 0.12);
+    padding: 4px 10px;
+    border-radius: 999px;
+  }
+  .cred-box {
+    width: 100%;
+    margin-top: 4px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .cred-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    background: #f8fafc;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 8px 10px;
+    text-align: left;
+  }
+  .cred-info {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+  }
+  .cred-label {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--text-muted);
+  }
+  .cred-value {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-main);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .copy-btn {
+    flex-shrink: 0;
+    border: none;
+    background: var(--primary);
+    color: #fff;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 7px 12px;
+    border-radius: 9px;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.2s ease;
+  }
+  .copy-btn:hover {
+    background: #1e293b;
+    transform: translateY(-2px);
+  }
+  .copy-btn.copied {
+    background: #16a34a;
+  }
 </style>
 
 <div class="fintech-dashboard">
@@ -112,9 +189,41 @@
       <a href="https://kafa-wan.pages.dev/form-erph" class="menu-item">
         <div class="menu-icon">📝</div><span>Form</span>
       </a>
-      <a href="https://kafa-wan.pages.dev/erph" class="menu-item">
+      <a href="https://kafa-wan.pages.dev/rekod-erph" class="menu-item">
         <div class="menu-icon">🗂️</div><span>Kad</span>
       </a>
+    </div>
+  </div>
+
+  <div class="category-group">
+    <div class="category-title">RPH Online</div>
+    <div class="menu-grid">
+      <a href="https://kafa-wan.pages.dev/erph" class="menu-item">
+        <div class="menu-icon">📘</div><span>ERPH</span>
+      </a>
+
+      <div class="menu-item rph-card">
+        <div class="rph-card-badge">Portal Rasmi</div>
+        <a href="https://myrph.yitrg.gov.my/home" target="_blank" rel="noopener" class="menu-item-link">
+          <div class="menu-icon">🏛️</div><span>My RPH</span>
+        </a>
+        <div class="cred-box">
+          <div class="cred-row">
+            <div class="cred-info">
+              <span class="cred-label">Email</span>
+              <span class="cred-value">wanhasbullah4897@gmail.com</span>
+            </div>
+            <button type="button" class="copy-btn" data-copy="wanhasbullah4897@gmail.com">Copy</button>
+          </div>
+          <div class="cred-row">
+            <div class="cred-info">
+              <span class="cred-label">Password</span>
+              <span class="cred-value">@WanH#4897</span>
+            </div>
+            <button type="button" class="copy-btn" data-copy="@WanH#4897">Copy</button>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
@@ -144,5 +253,48 @@
             startTyping("type-subtitle", subtitleText, 50);
         });
     }, 500);
+})();
+
+/* --- Addition: copy-to-clipboard for My RPH credentials --- */
+(function() {
+    document.querySelectorAll('.copy-btn').forEach(function(btn) {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            const value = btn.getAttribute('data-copy');
+            const originalText = btn.textContent;
+
+            function showCopied() {
+                btn.textContent = 'Disalin!';
+                btn.classList.add('copied');
+                setTimeout(() => {
+                    btn.textContent = originalText;
+                    btn.classList.remove('copied');
+                }, 1500);
+            }
+
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(value).then(showCopied).catch(function() {
+                    fallbackCopy(value);
+                    showCopied();
+                });
+            } else {
+                fallbackCopy(value);
+                showCopied();
+            }
+
+            function fallbackCopy(text) {
+                const temp = document.createElement('textarea');
+                temp.value = text;
+                temp.style.position = 'fixed';
+                temp.style.opacity = '0';
+                document.body.appendChild(temp);
+                temp.focus();
+                temp.select();
+                try { document.execCommand('copy'); } catch (err) {}
+                document.body.removeChild(temp);
+            }
+        });
+    });
 })();
 </script>
