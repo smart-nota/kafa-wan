@@ -137,198 +137,66 @@
     .btn-balik-form .bl-sub  { font-size: 9px; font-weight: 500; opacity: 0.7; letter-spacing: 0.5px; }
 
     /* ═══════════════════════════════════════════════════
-       KALENDAR MINGGUAN — premium weekly archive
-       Minggu bermula Ahad, Minggu 1 = 16 November 2025
+       KALENDAR MINGGUAN (baru)
     ═══════════════════════════════════════════════════ */
-    .weekly-calendar {
+    .kal-wrap {
       background: var(--card-bg);
       border-radius: 22px;
-      padding: 20px;
+      padding: 22px 24px;
       margin-bottom: 22px;
       box-shadow: var(--shadow-card);
       border: 1px solid var(--border);
       position: relative;
       overflow: hidden;
     }
-
-    .weekly-calendar::before {
+    .kal-wrap::before {
       content: '';
       position: absolute;
       top: 0; left: 0; right: 0;
       height: 3px;
-      background: linear-gradient(90deg, var(--blue-deep), var(--blue), #60a5fa);
+      background: linear-gradient(90deg, var(--blue), #60a5fa);
     }
-
-    .weekly-calendar-head {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 14px;
-      margin-bottom: 16px;
-      flex-wrap: wrap;
+    .kal-head {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 12px; flex-wrap: wrap; margin-bottom: 16px;
     }
-
-    .weekly-calendar-title-wrap {
-      display: flex;
-      align-items: center;
-      gap: 11px;
-      min-width: 0;
+    .kal-title { font-size: 17px; font-weight: 800; color: var(--text-main); letter-spacing: -0.3px; }
+    .kal-sub { font-size: 11px; color: var(--text-muted); font-weight: 600; margin-top: 3px; }
+    .kal-total {
+      background: var(--blue-light); color: var(--blue);
+      font-size: 10px; font-weight: 800; letter-spacing: 0.8px; text-transform: uppercase;
+      padding: 7px 13px; border-radius: 10px; white-space: nowrap;
     }
-
-    .weekly-calendar-icon {
-      width: 40px;
-      height: 40px;
-      flex: 0 0 40px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 12px;
-      background: var(--blue-light);
-      color: var(--blue);
-      font-size: 19px;
-      box-shadow: inset 0 0 0 1px rgba(0,82,255,0.08);
+    .kal-current {
+      background: linear-gradient(135deg, var(--blue-deep) 0%, var(--blue) 100%);
+      border-radius: 16px; padding: 16px 20px; margin-bottom: 16px;
+      box-shadow: 0 10px 28px -8px rgba(0,31,107,0.4);
     }
-
-    .weekly-calendar-title {
-      font-size: 14px;
-      font-weight: 800;
-      color: var(--text-main);
-      letter-spacing: -0.2px;
+    .kal-current-lbl {
+      font-size: 9px; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase;
+      color: rgba(255,255,255,0.65); margin-bottom: 5px;
     }
-
-    .weekly-calendar-subtitle {
-      margin-top: 2px;
-      font-size: 10px;
-      color: var(--text-muted);
-      font-weight: 600;
+    .kal-current-main { color: #fff; font-size: 22px; font-weight: 800; letter-spacing: -0.5px; line-height: 1.2; }
+    .kal-current-range { color: rgba(255,255,255,0.8); font-size: 13px; font-weight: 600; margin-top: 4px; }
+    .kal-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+      gap: 10px; max-height: 250px; overflow-y: auto; padding: 2px 4px 2px 2px;
     }
-
-    .weekly-calendar-count {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 7px 11px;
-      border-radius: 10px;
-      background: var(--blue-light);
-      color: var(--blue);
-      border: 1px solid var(--blue-mid);
-      font-size: 10px;
-      font-weight: 800;
-      letter-spacing: 0.4px;
-      white-space: nowrap;
+    .kal-item {
+      background: var(--surface); border: 1.5px solid var(--border);
+      border-radius: 13px; padding: 10px 13px; transition: var(--transition);
     }
-
-    .weekly-calendar-count .count-number {
-      font-size: 14px;
-      line-height: 1;
+    .kal-item:hover { border-color: rgba(0,82,255,0.3); background: var(--blue-light); }
+    .kal-item-no { font-size: 12px; font-weight: 800; color: var(--text-main); display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+    .kal-item-range { font-size: 11px; font-weight: 600; color: var(--text-sub); margin-top: 3px; line-height: 1.4; }
+    .kal-item.semasa {
+      border-color: var(--blue); background: var(--blue-light);
+      box-shadow: 0 0 0 3px rgba(0,82,255,0.15);
     }
-
-    .weekly-calendar-list {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(285px, 1fr));
-      gap: 9px;
-      max-height: 420px;
-      overflow-y: auto;
-      padding: 2px 4px 2px 2px;
-      scrollbar-width: thin;
-      scrollbar-color: #cbd5e1 transparent;
-    }
-
-    .weekly-calendar-item {
-      display: flex;
-      align-items: center;
-      gap: 11px;
-      min-width: 0;
-      padding: 10px 12px;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 13px;
-      transition: var(--transition);
-    }
-
-    .weekly-calendar-item:hover {
-      background: #fff;
-      border-color: rgba(0,82,255,0.22);
-      transform: translateY(-1px);
-      box-shadow: 0 6px 18px rgba(0,82,255,0.08);
-    }
-
-    .weekly-calendar-item.aktif {
-      background: linear-gradient(135deg, #eff6ff 0%, #ffffff 100%);
-      border-color: #93c5fd;
-      box-shadow: 0 0 0 2px rgba(0,82,255,0.07);
-    }
-
-    .weekly-calendar-number {
-      width: 39px;
-      height: 39px;
-      flex: 0 0 39px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 11px;
-      background: #fff;
-      color: var(--blue);
-      border: 1px solid var(--blue-mid);
-      font-size: 10px;
-      font-weight: 800;
-      line-height: 1.1;
-      text-align: center;
-    }
-
-    .weekly-calendar-item.aktif .weekly-calendar-number {
-      background: linear-gradient(135deg, var(--blue), var(--blue-dark));
-      color: #fff;
-      border-color: transparent;
-      box-shadow: 0 5px 13px rgba(0,82,255,0.25);
-    }
-
-    .weekly-calendar-info {
-      min-width: 0;
-      flex: 1;
-    }
-
-    .weekly-calendar-range {
-      color: var(--text-main);
-      font-size: 11px;
-      line-height: 1.45;
-      font-weight: 700;
-    }
-
-    .weekly-calendar-status {
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      margin-top: 3px;
-      color: var(--text-muted);
-      font-size: 8px;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 0.8px;
-    }
-
-    .weekly-calendar-status.current {
-      color: var(--blue);
-    }
-
-    .weekly-calendar-status.current::before {
-      content: '';
-      width: 5px;
-      height: 5px;
-      border-radius: 50%;
-      background: var(--blue);
-      box-shadow: 0 0 0 3px rgba(0,82,255,0.10);
-    }
-
-    .weekly-calendar-empty {
-      padding: 18px;
-      text-align: center;
-      color: var(--text-muted);
-      font-size: 11px;
-      font-weight: 700;
-      background: var(--surface);
-      border: 1px dashed var(--border);
-      border-radius: 12px;
+    .kal-item.semasa .kal-item-no { color: var(--blue); }
+    .kal-badge {
+      background: var(--blue); color: #fff; font-size: 8px; font-weight: 800;
+      letter-spacing: 0.6px; text-transform: uppercase; padding: 2px 7px; border-radius: 6px;
     }
 
     /* ═══════════════════════════════════════════════════
@@ -879,6 +747,20 @@
       outline: none; border-color: var(--blue); box-shadow: 0 0 0 3px rgba(0,82,255,0.12);
     }
 
+    /* paparan minggu automatik dalam form (baru) */
+    .fm-minggu-info {
+      margin-top: 8px; background: var(--blue-light); border: 1.5px solid var(--blue-mid);
+      border-radius: 12px; padding: 10px 13px; display: none;
+    }
+    .fm-minggu-info.ada { display: block; }
+    .fm-minggu-title { font-size: 14px; font-weight: 800; color: var(--blue); display: flex; align-items: center; gap: 7px; flex-wrap: wrap; }
+    .fm-minggu-range { font-size: 12px; font-weight: 600; color: var(--text-sub); margin-top: 3px; line-height: 1.45; }
+    .fm-minggu-badge {
+      background: var(--blue); color: #fff; font-size: 8px; font-weight: 800;
+      letter-spacing: 0.6px; text-transform: uppercase; padding: 2px 7px; border-radius: 6px;
+    }
+    #fmMinggu[readonly] { cursor: default; font-weight: 800; color: var(--blue); }
+
     .fm-btn-submit {
       background: linear-gradient(135deg, var(--blue) 0%, var(--blue-dark) 100%);
       color: white; padding: 16px; border: none;
@@ -919,10 +801,6 @@
       .header-grid { gap: 10px; }
       .btn-balik-form .bl-sub { display: none; }
       .filter-bar { padding: 16px; gap: 10px; }
-      .weekly-calendar { padding: 16px; border-radius: 20px; }
-      .weekly-calendar-head { align-items: flex-start; }
-      .weekly-calendar-list { grid-template-columns: 1fr; max-height: 380px; }
-      .weekly-calendar-range { font-size: 10px; }
       .erph-input { min-width: 100%; }
       .stats-row { grid-template-columns: repeat(3,1fr); gap: 8px; }
       .stat-num { font-size: 22px; }
@@ -941,6 +819,9 @@
       .btn-bulk { flex: 1; }
       .card-actions-row { flex-direction: column; }
       .modal-manage-row { flex-direction: column; }
+      .kal-wrap { padding: 18px 16px; }
+      .kal-grid { grid-template-columns: 1fr; max-height: 220px; }
+      .kal-current-main { font-size: 19px; }
     }
     @media (max-width: 400px) {
       .fm-kemahiran-grid { grid-template-columns: 1fr; }
@@ -972,24 +853,21 @@
   </div>
 
   <!-- KALENDAR MINGGUAN -->
-  <section class="weekly-calendar" aria-label="Kalendar Mingguan">
-    <div class="weekly-calendar-head">
-      <div class="weekly-calendar-title-wrap">
-        <div class="weekly-calendar-icon" aria-hidden="true">▦</div>
-        <div>
-          <div class="weekly-calendar-title">Kalendar Mingguan</div>
-          <div class="weekly-calendar-subtitle">Minggu bermula Ahad • Minggu 1 bermula 16 November 2025</div>
-        </div>
+  <div class="kal-wrap" id="kalendarMinggu">
+    <div class="kal-head">
+      <div>
+        <div class="kal-title">Kalendar Mingguan</div>
+        <div class="kal-sub">Ahad hingga Sabtu • Minggu 1 bermula Ahad, 16 November 2025</div>
       </div>
-      <div class="weekly-calendar-count">
-        <span class="count-number" id="weeklyCount">—</span>
-        <span>MINGGU</span>
-      </div>
+      <div class="kal-total" id="kalTotal">—</div>
     </div>
-    <div id="weeklyCalendarList" class="weekly-calendar-list">
-      <div class="weekly-calendar-empty">Memuatkan kalendar minggu...</div>
+    <div class="kal-current">
+      <div class="kal-current-lbl">Minggu Semasa</div>
+      <div class="kal-current-main" id="kalSemasaNo">—</div>
+      <div class="kal-current-range" id="kalSemasaJulat">—</div>
     </div>
-  </section>
+    <div class="kal-grid" id="kalGrid"></div>
+  </div>
 
   <!-- FILTER BAR -->
   <div class="filter-bar">
@@ -1107,12 +985,20 @@
 
       <div class="fm-grid-2">
         <div class="fm-group">
-          <label class="fm-label" for="fmMinggu">3. Minggu</label>
-          <input type="text" id="fmMinggu" class="fm-input" placeholder="Cth: 3">
+          <label class="fm-label" for="fmMinggu">3. Minggu (Automatik)</label>
+          <input type="text" id="fmMinggu" class="fm-input" placeholder="Auto" readonly>
+          <div class="fm-minggu-info" id="fmMingguInfo"></div>
         </div>
         <div class="fm-group">
           <label class="fm-label" for="fmSubjek">4. Mata Pelajaran</label>
           <input type="text" id="fmSubjek" class="fm-input" placeholder="Cth: Sirah Nabawiyyah">
+        </div>
+      </div>
+
+      <div class="fm-group">
+        <div class="fm-box-tambahan" style="margin-top:0;">
+          <div class="fm-box-tambahan-label"><span>✦</span> Catatan Minggu</div>
+          <textarea id="fmMingguCatatan" class="fm-input" rows="2" placeholder="Catatan tambahan untuk minggu ini..."></textarea>
         </div>
       </div>
 
@@ -1268,19 +1154,59 @@
 
   const STORAGE_KEY = 'erph_records_v1';
 
-  // KALENDAR MINGGUAN
-  // Minggu 1 ditetapkan bermula Ahad, 16 November 2025.
-  const WEEK_ANCHOR = new Date(2025, 10, 16);
-  const HARI_MINGGUAN = ['Ahad', 'Isnin', 'Selasa', 'Rabu', 'Khamis', 'Jumaat', 'Sabtu'];
-  const BULAN_MELAYU = [
-    'Januari', 'Februari', 'Mac', 'April', 'Mei', 'Jun',
-    'Julai', 'Ogos', 'September', 'Oktober', 'November', 'Disember'
-  ];
-
   let senaraiData  = [];   // semua rekod (master)
   let dataPapar    = [];   // rekod selepas ditapis (susunan asal, belum reverse)
   let fmModeRef    = 'madah';
   let selectedIds  = new Set();
+
+  // ─── SISTEM MINGGU (Ahad → Sabtu, 16 Nov 2025 = Minggu 1) ───
+  const WEEK_ANCHOR = new Date(2025, 10, 16);
+  const NAMA_HARI_MS  = ['Ahad','Isnin','Selasa','Rabu','Khamis','Jumaat','Sabtu'];
+  const NAMA_BULAN_MS = ['Januari','Februari','Mac','April','Mei','Jun','Julai','Ogos','September','Oktober','November','Disember'];
+
+  function mulaMingguDari(tarikh) {
+    const d = new Date(tarikh.getFullYear(), tarikh.getMonth(), tarikh.getDate());
+    d.setDate(d.getDate() - d.getDay());   // getDay(): 0 = Ahad
+    return d;
+  }
+  function nomborMingguDari(tarikh) {
+    const ahad = mulaMingguDari(tarikh);
+    const beza = Math.round((ahad.getTime() - WEEK_ANCHOR.getTime()) / 86400000);
+    return Math.floor(beza / 7) + 1;
+  }
+  function formatTarikhMs(d) {
+    return `${NAMA_HARI_MS[d.getDay()]}, ${d.getDate()} ${NAMA_BULAN_MS[d.getMonth()]} ${d.getFullYear()}`;
+  }
+  function julatMinggu(n) {
+    const mula = new Date(WEEK_ANCHOR.getFullYear(), WEEK_ANCHOR.getMonth(), WEEK_ANCHOR.getDate() + (n - 1) * 7);
+    const tamat = new Date(mula.getFullYear(), mula.getMonth(), mula.getDate() + 6);
+    return { mula, tamat, teks: `${formatTarikhMs(mula)} hingga ${formatTarikhMs(tamat)}` };
+  }
+  function mingguSemasa() {
+    return Math.max(1, nomborMingguDari(new Date()));
+  }
+
+  // ─── KALENDAR MINGGUAN ──────────────────────────────────────
+  function renderKalendar() {
+    const semasa = mingguSemasa();
+    const j = julatMinggu(semasa);
+    document.getElementById('kalTotal').textContent = semasa + ' minggu dijana';
+    document.getElementById('kalSemasaNo').textContent = 'Minggu ' + semasa;
+    document.getElementById('kalSemasaJulat').textContent = j.teks;
+
+    const grid = document.getElementById('kalGrid');
+    grid.innerHTML = '';
+    for (let n = semasa; n >= 1; n--) {
+      const r = julatMinggu(n);
+      const div = document.createElement('div');
+      div.className = 'kal-item' + (n === semasa ? ' semasa' : '');
+      div.innerHTML = `
+        <div class="kal-item-no"><span>Minggu ${n}</span>${n === semasa ? '<span class="kal-badge">Semasa</span>' : ''}</div>
+        <div class="kal-item-range">${esc(r.teks)}</div>
+      `;
+      grid.appendChild(div);
+    }
+  }
 
   // ─── ID JANA ────────────────────────────────────────────────
   function genId() {
@@ -1322,6 +1248,7 @@
     return {
       id: r.id || genId(),
       hari: r.hari || '', tarikh: r.tarikh || '', minggu: r.minggu || '',
+      mingguCatatan: r.mingguCatatan || '',
       subjek: r.subjek || '', kelas: r.kelas || '',
       masaAI: r.masaAI || '', masaK: r.masaK || '',
       hadirL: (r.hadirL !== undefined && r.hadirL !== null) ? r.hadirL : '0',
@@ -1591,78 +1518,6 @@
     document.getElementById('statMinggu').textContent = mingguSet.size;
   }
 
-  // ─── KALENDAR MINGGUAN ──────────────────────────────────────
-  function tarikhTanpaMasa(d) {
-    return new Date(d.getFullYear(), d.getMonth(), d.getDate());
-  }
-
-  function mulaMingguAhad(d) {
-    const tarikh = tarikhTanpaMasa(d);
-    const hari = tarikh.getDay(); // Ahad = 0
-    tarikh.setDate(tarikh.getDate() - hari);
-    return tarikh;
-  }
-
-  function formatTarikhRingkas(d) {
-    return `${d.getDate()} ${BULAN_MELAYU[d.getMonth()]} ${d.getFullYear()}`;
-  }
-
-  function formatJulatMinggu(mula, tamat) {
-    return `${HARI_MINGGUAN[mula.getDay()]}, ${formatTarikhRingkas(mula)} hingga ${HARI_MINGGUAN[tamat.getDay()]}, ${formatTarikhRingkas(tamat)}`;
-  }
-
-  function renderKalendarMingguan() {
-    const list = document.getElementById('weeklyCalendarList');
-    const count = document.getElementById('weeklyCount');
-    if (!list || !count) return;
-
-    const hariIni = tarikhTanpaMasa(new Date());
-    const mingguSemasa = mulaMingguAhad(hariIni);
-
-    // Kalendar hanya dipaparkan dari Minggu 1 sehingga minggu semasa.
-    // Jika tarikh sistem sebelum tarikh mula, paparkan mesej yang sesuai.
-    if (mingguSemasa < WEEK_ANCHOR) {
-      count.textContent = '0';
-      list.innerHTML = '<div class="weekly-calendar-empty">Kalendar akan bermula pada Ahad, 16 November 2025.</div>';
-      return;
-    }
-
-    const jumlahMinggu = Math.floor((mingguSemasa - WEEK_ANCHOR) / (7 * 24 * 60 * 60 * 1000)) + 1;
-    count.textContent = jumlahMinggu;
-
-    const fragment = document.createDocumentFragment();
-
-    for (let nomborMinggu = 1; nomborMinggu <= jumlahMinggu; nomborMinggu++) {
-      const mula = new Date(WEEK_ANCHOR);
-      mula.setDate(WEEK_ANCHOR.getDate() + ((nomborMinggu - 1) * 7));
-
-      const tamat = new Date(mula);
-      tamat.setDate(mula.getDate() + 6);
-
-      const item = document.createElement('div');
-      const ialahSemasa = mula.getTime() === mingguSemasa.getTime();
-
-      item.className = 'weekly-calendar-item' + (ialahSemasa ? ' aktif' : '');
-      item.setAttribute('data-week-number', nomborMinggu);
-      item.setAttribute('aria-current', ialahSemasa ? 'date' : 'false');
-
-      item.innerHTML = `
-        <div class="weekly-calendar-number">MINGGU<br>${nomborMinggu}</div>
-        <div class="weekly-calendar-info">
-          <div class="weekly-calendar-range">${formatJulatMinggu(mula, tamat)}</div>
-          <div class="weekly-calendar-status ${ialahSemasa ? 'current' : ''}">
-            ${ialahSemasa ? 'Minggu ini' : 'Minggu ' + nomborMinggu}
-          </div>
-        </div>
-      `;
-
-      fragment.appendChild(item);
-    }
-
-    list.innerHTML = '';
-    list.appendChild(fragment);
-  }
-
   // ─── REFRESH SELEPAS SEBARANG PERUBAHAN DATA ────────────────
   function refresh() {
     kemasReminder(senaraiData);
@@ -1862,6 +1717,26 @@
     document.getElementById('fmBoxMasaK').style.display  = h === 'Khamis' ? '' : 'none';
   }
 
+  // ─── MINGGU AUTOMATIK DALAM FORM ────────────────────────────
+  function fmPapaMinggu() {
+    const v = document.getElementById('fmMinggu').value.trim();
+    const el = document.getElementById('fmMingguInfo');
+    if (!v) { el.innerHTML = ''; el.classList.remove('ada'); return; }
+    const n = parseInt(v, 10);
+    if (/^\d+$/.test(v) && n >= 1) {
+      const j = julatMinggu(n);
+      const badge = (n === mingguSemasa()) ? '<span class="fm-minggu-badge">Semasa</span>' : '';
+      el.innerHTML = `<div class="fm-minggu-title">Minggu ${n} ${badge}</div><div class="fm-minggu-range">${esc(j.teks)}</div>`;
+    } else {
+      el.innerHTML = `<div class="fm-minggu-title">Minggu ${esc(v)}</div>`;
+    }
+    el.classList.add('ada');
+  }
+  function fmSetMingguSemasa() {
+    document.getElementById('fmMinggu').value = String(mingguSemasa());
+    fmPapaMinggu();
+  }
+
   function fmAutoJumlah() {
     const l = parseInt(document.getElementById('fmHadirL').value) || 0;
     const p = parseInt(document.getElementById('fmHadirP').value) || 0;
@@ -1937,6 +1812,7 @@
     const hari   = document.getElementById('fmHari').value;
     const tarikh = document.getElementById('fmTarikh').value;
     const minggu = document.getElementById('fmMinggu').value;
+    const mingguCatatan = document.getElementById('fmMingguCatatan').value.trim();
     const subjek = document.getElementById('fmSubjek').value.trim();
     const kelas  = document.getElementById('fmKelas').value;
 
@@ -1978,7 +1854,7 @@
 
     const now = new Date().toISOString();
     const dataBaru = {
-      hari, tarikh, minggu, subjek, kelas, masaAI, masaK,
+      hari, tarikh, minggu, mingguCatatan, subjek, kelas, masaAI, masaK,
       hadirL: hl, hadirP: hp, hadirTotal: htotal, kehadiran: kehadiranPenuh,
       sk, kemahiranArr: kemArr, kemahiranLain: kemLain, kemahiran: kemahiranPenuh,
       sp, aktivitiUtama: aktUtama, aktivitiTambahan: aktTambahan, aktiviti: aktivitiPenuh,
@@ -2021,7 +1897,14 @@
     document.getElementById('fmEditId').value = item.id;
     document.getElementById('fmHari').value = item.hari || 'Ahad';
     document.getElementById('fmTarikh').value = item.tarikh || '';
-    document.getElementById('fmMinggu').value = item.minggu || '';
+    // Rekod lama: kekalkan minggu yang tersimpan. Hanya jika kosong, guna minggu semasa.
+    if (item.minggu) {
+      document.getElementById('fmMinggu').value = item.minggu;
+      fmPapaMinggu();
+    } else {
+      fmSetMingguSemasa();
+    }
+    document.getElementById('fmMingguCatatan').value = item.mingguCatatan || '';
     document.getElementById('fmSubjek').value = item.subjek || '';
     document.getElementById('fmKelas').value = item.kelas || document.getElementById('fmKelas').options[0].value;
     fmToggleMasa();
@@ -2067,7 +1950,8 @@
     document.getElementById('fmEditId').value = '';
     document.getElementById('fmHari').value = 'Ahad';
     document.getElementById('fmTarikh').value = '';
-    document.getElementById('fmMinggu').value = '';
+    fmSetMingguSemasa();
+    document.getElementById('fmMingguCatatan').value = '';
     document.getElementById('fmSubjek').value = '';
     document.getElementById('fmKelas').selectedIndex = 0;
     document.getElementById('fmMasaAI').selectedIndex = 0;
@@ -2105,8 +1989,9 @@
 
   // ─── MULA ────────────────────────────────────────────────
   function muatRekod() {
-    renderKalendarMingguan();
     senaraiData = loadRecords();
+    renderKalendar();
+    fmSetMingguSemasa();
     refresh();
   }
   window.addEventListener('load', muatRekod);
