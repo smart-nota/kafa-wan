@@ -727,6 +727,19 @@
     }
     .fm-ref-btn.aktif { background: #ef4444; color: #fff; border-color: #ef4444; }
 
+    /* Refleksi Madah — nombor menguasai auto (dikunci) */
+    #fmRef1[readonly] {
+      background: var(--blue-light); color: var(--blue);
+      font-weight: 800; cursor: default; border-color: var(--blue-mid);
+    }
+    #fmRef1[readonly]:focus { box-shadow: none; border-color: var(--blue-mid); background: var(--blue-light); }
+    .fm-ref-hint {
+      margin-top: 10px; font-size: 11px; font-weight: 600; color: var(--text-sub);
+      background: #fff; border: 1px dashed #fecaca; border-radius: 9px;
+      padding: 8px 11px; line-height: 1.5;
+    }
+    .fm-ref-hint b { color: var(--blue); font-weight: 800; }
+
     /* box tambahan (accent) - kandungan dari form-erph.html, gaya diselaraskan dgn fm design */
     .fm-box-tambahan {
       margin-top: 12px; position: relative;
@@ -1050,7 +1063,7 @@
           </div>
           <div>
             <small style="font-size:11px;font-weight:700;color:#475569;">Hadir/Jumlah</small>
-            <input type="text" id="fmHadirTotal" value="0/35" class="fm-input" style="margin-top:4px;">
+            <input type="text" id="fmHadirTotal" value="0/35" class="fm-input" style="margin-top:4px;" oninput="fmRefAuto()">
           </div>
         </div>
       </div>
@@ -1063,7 +1076,7 @@
           <option value="اقرأ ١-٣ : ١٢&#10;اقرأ ٤-٦ : ١٤&#10;موک سورت ١-١٠٠ : ٨&#10;موک سورت ١٠١-٢٠٠ : ١&#10;موک سورت ٢٠١-٣٠٠ : ٠&#10;موک سورت ٣٠١-٤٠٠ : ٠&#10;موک سورت ٤٠١-٥٠٠ : ٠&#10;موک سورت ٥٠١-٦٠٤ : ٠">B) اقرأ ١-٦، مقدم، موک سورت</option>
           <option value="lain">C) Lain-lain</option>
         </select>
-        <textarea id="fmSk" class="fm-input fm-textarea" rows="3" placeholder="Masukkan Standard Kandungan..."></textarea>
+        <textarea id="fmSk" class="fm-input fm-textarea" rows="3" placeholder="Masukkan Standard Kandungan..." oninput="fmSkBerubah()"></textarea>
       </div>
 
       <div class="fm-group">
@@ -1090,7 +1103,7 @@
           <option value="داخير ڤمبلاجرن، موريد داڤت :&#10;١. ممباچ القراءن دڠن لنچر&#10;٢. مپبوت حوروف دان باچاءن دالم إقراء دڠن بتول">ج) تلاوة</option>
           <option value="داخير ڤمبلاجرن، موريد داڤت :&#10;١. ممباچ سورة لازيم دڠن بتول&#10;٢. مڠحفظ سورة ترڤيليه دڠن لنچر">د) حفظن</option>
         </select>
-        <textarea id="fmSp" class="fm-input fm-textarea" rows="4" placeholder="Masukkan Standard Pembelajaran..."></textarea>
+        <textarea id="fmSp" class="fm-input fm-textarea" rows="4" placeholder="Masukkan Standard Pembelajaran..." oninput="fmSpManual()"></textarea>
       </div>
 
       <div class="fm-group">
@@ -1121,10 +1134,13 @@
         </div>
         <div id="fmBoxMadah">
           <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
-            <input type="number" id="fmRef1" value="17" class="fm-input" style="width:80px;"> <span style="font-size:14px;">موريد مڠواساءي</span>
+            <input type="number" id="fmRef1" value="0" class="fm-input" style="width:80px;" readonly> <span style="font-size:14px;">موريد مڠواساءي</span>
           </div>
           <div style="display:flex;align-items:center;gap:10px;">
-            <input type="number" id="fmRef2" value="6" class="fm-input" style="width:80px;"> <span style="font-size:14px;">موريد ممرلوكن بيمبيڠن</span>
+            <input type="number" id="fmRef2" value="0" min="0" class="fm-input" style="width:80px;" oninput="fmRefBimbingan()"> <span style="font-size:14px;">موريد ممرلوكن بيمبيڠن</span>
+          </div>
+          <div class="fm-ref-hint" id="fmRefHint">
+            Murid menguasai dijana <b>automatik</b> (jumlah hadir − memerlukan bimbingan). Ubah nombor <b>memerlukan bimbingan</b> sahaja.
           </div>
         </div>
         <div id="fmBoxTilawah" style="display:none;">
@@ -1158,6 +1174,10 @@
   let dataPapar    = [];   // rekod selepas ditapis (susunan asal, belum reverse)
   let fmModeRef    = 'madah';
   let selectedIds  = new Set();
+
+  // ─── STATE BARU: auto-jana Standard Pembelajaran & Refleksi Madah ───
+  let fmSpTemplate        = '';     // templat SP aktif (pilihan ا / ب) — kosong = auto-jana tidak aktif
+  let fmBimbinganManual   = false;  // true jika guru telah ubah nombor "memerlukan bimbingan"
 
   // ─── SISTEM MINGGU (Ahad → Sabtu, 16 Nov 2025 = Minggu 1) ───
   const WEEK_ANCHOR = new Date(2025, 10, 16);
@@ -1744,6 +1764,72 @@
     const bahagian = totalField.split('/');
     const max = bahagian[1] ? bahagian[1].trim() : '35';
     document.getElementById('fmHadirTotal').value = (l + p) + '/' + max;
+    fmRefAuto();   // kemas kini nombor refleksi madah mengikut kehadiran
+  }
+
+  // ─── REFLEKSI MADAH — AUTO JANA MENGIKUT KEHADIRAN ──────────
+  // Murid menguasai  = jumlah hadir − murid memerlukan bimbingan  (auto, dikunci)
+  // Murid memerlukan bimbingan = boleh diubah oleh guru
+  function fmJumlahHadir() {
+    const depan = String(document.getElementById('fmHadirTotal').value).split('/')[0];
+    return Math.max(0, parseInt(depan, 10) || 0);
+  }
+  function fmRefAuto() {
+    const total = fmJumlahHadir();
+    const r2El  = document.getElementById('fmRef2');
+    let r2 = parseInt(r2El.value, 10) || 0;
+
+    if (!fmBimbinganManual) {
+      // Belum diubah guru: nilai asal 6, tetapi tidak melebihi jumlah hadir
+      r2 = Math.min(6, total);
+    } else {
+      // Sudah diubah guru: kekalkan, tetapi pastikan dalam julat 0 … jumlah hadir
+      r2 = Math.min(Math.max(0, r2), total);
+    }
+    r2El.value = r2;
+    r2El.max   = total;
+    document.getElementById('fmRef1').value = total - r2;
+  }
+  function fmRefBimbingan() {
+    fmBimbinganManual = true;
+    const r2El = document.getElementById('fmRef2');
+    const total = fmJumlahHadir();
+    // Jika medan dikosongkan sementara, jangan tulis semula nilai (elak mengganggu taipan)
+    if (r2El.value === '') {
+      document.getElementById('fmRef1').value = total;
+      return;
+    }
+    fmRefAuto();
+  }
+
+  // ─── STANDARD KANDUNGAN → STANDARD PEMBELAJARAN (AUTO) ──────
+  // Ringkaskan Standard Kandungan menjadi satu baris:
+  // setiap baris digabung dengan "، " dan akhiran bilangan murid ( : ١٢ ) dibuang.
+  function fmSkRingkas() {
+    const sk = document.getElementById('fmSk').value || '';
+    return sk.split('\n')
+      .map(l => l.trim().replace(/\s*:\s*[٠-٩0-9]+\s*$/, '').trim())
+      .filter(l => l !== '')
+      .join('، ');
+  }
+  // Ganti "ڤمبلاجرن" selepas "تنتڠ" dengan Standard Kandungan.
+  // Baris pertama ("داخير ڤمبلاجرن") tidak disentuh.
+  function fmJanaSP() {
+    if (!fmSpTemplate) return;
+    const ringkas = fmSkRingkas();
+    const hasil = ringkas
+      ? fmSpTemplate.replace(/(تنتڠ\s+)ڤمبلاجرن/g, (m, awalan) => awalan + ringkas)
+      : fmSpTemplate;
+    document.getElementById('fmSp').value = hasil;
+  }
+  // Dipanggil apabila guru menaip terus dalam kotak Standard Kandungan
+  function fmSkBerubah() {
+    fmJanaSP();
+  }
+  // Dipanggil apabila guru menaip/menyunting terus kotak Standard Pembelajaran
+  // → hentikan auto-jana supaya suntingan tidak ditimpa
+  function fmSpManual() {
+    fmSpTemplate = '';
   }
 
   function fmUpdateSK() {
@@ -1754,10 +1840,18 @@
       document.getElementById('fmSk').value = '';
       document.getElementById('fmSk').focus();
     }
+    fmJanaSP();   // jika SP (ا / ب) aktif, kemas kini automatik
   }
   function fmUpdateSP() {
     const sel = document.getElementById('fmSpSelect');
-    if (sel.value !== '') document.getElementById('fmSp').value = sel.value;
+    if (sel.value !== '') {
+      document.getElementById('fmSp').value = sel.value;
+      // Pilihan 1 (ا) dan 2 (ب) sahaja mengaktifkan auto-jana dari Standard Kandungan
+      fmSpTemplate = (sel.selectedIndex === 1 || sel.selectedIndex === 2) ? sel.value : '';
+      fmJanaSP();
+    } else {
+      fmSpTemplate = '';
+    }
   }
   function fmUpdateAkt() {
     const sel = document.getElementById('fmAktSelect');
@@ -1923,6 +2017,8 @@
     });
     document.getElementById('fmKemahiranLain').value = item.kemahiranLain || '';
 
+    // Mod edit: kekalkan teks SP tersimpan, auto-jana tidak aktif sehingga SP dipilih semula
+    fmSpTemplate = '';
     document.getElementById('fmSp').value = item.sp || '';
     document.getElementById('fmSpSelect').value = '';
 
@@ -1931,6 +2027,8 @@
     document.getElementById('fmAktSelect').value = '';
 
     fmPilihRef(item.refleksiMode || 'madah');
+    // Mod edit: kekalkan nombor tersimpan (tidak dikira semula) sehingga kehadiran/bimbingan diubah
+    fmBimbinganManual = true;
     document.getElementById('fmRef1').value = item.ref1;
     document.getElementById('fmRef2').value = item.ref2;
     document.getElementById('fmRefLancar').value = item.refLancar;
@@ -1967,11 +2065,13 @@
     document.getElementById('fmKemahiranLain').value = '';
     document.getElementById('fmSp').value = '';
     document.getElementById('fmSpSelect').value = '';
+    fmSpTemplate = '';
     document.getElementById('fmAkt').value = '';
     document.getElementById('fmAktTambahan').value = '';
     document.getElementById('fmAktSelect').value = '';
-    document.getElementById('fmRef1').value = '17';
-    document.getElementById('fmRef2').value = '6';
+    // Refleksi Madah: auto mengikut kehadiran (bimbingan asal 6, tidak melebihi jumlah hadir)
+    fmBimbinganManual = false;
+    fmRefAuto();
     document.getElementById('fmRefLancar').value = '3';
     document.getElementById('fmRefKurang').value = '14';
     document.getElementById('fmRefTidak').value = '11';
@@ -1992,6 +2092,7 @@
     senaraiData = loadRecords();
     renderKalendar();
     fmSetMingguSemasa();
+    fmRefAuto();
     refresh();
   }
   window.addEventListener('load', muatRekod);
